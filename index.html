@@ -1,0 +1,542 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Unified Social Inbox — Minimal Detailed</title>
+<style>
+:root{
+  --bg:#f7f8fa; --card:#ffffff; --border:#e7e9ee; --text:#0f1724; --muted:#586071;
+  --primary:#2563eb; --accent:#06b6d4; --danger:#ef4444;
+  --radius:12px; --shadow:0 6px 22px rgba(15,23,36,0.08);
+  font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+}
+
+/* Base */
+*{box-sizing:border-box}
+html,body{height:100%; margin:0; background:var(--bg); color:var(--text);}
+a{color:inherit; text-decoration:none}
+.small{font-size:13px}
+.muted{color:var(--muted)}
+
+/* Layout */
+.container{max-width:1300px; margin:20px auto; padding:14px; display:grid; grid-template-columns:260px 1fr 380px; gap:16px}
+.header{grid-column:1/-1; display:flex; align-items:center; justify-content:space-between; gap:12px; background:var(--card); border:1px solid var(--border); padding:12px 14px; border-radius:var(--radius); box-shadow:var(--shadow)}
+.brand{display:flex; gap:12px; align-items:center}
+.logo{width:48px;height:48px;border-radius:10px;background:linear-gradient(90deg,var(--primary),var(--accent));display:flex;align-items:center;justify-content:center;color:white;font-weight:800;font-size:18px}
+.header .search{flex:1; margin:0 12px}
+.search input{width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--border); background:#fbfdff}
+
+/* Panels */
+.panel{background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:14px; box-shadow:var(--shadow); height:calc(100vh - 140px); overflow:auto}
+
+/* LEFT: platforms, saved searches */
+.section-title{font-weight:700; margin-bottom:10px}
+.platform{display:flex;align-items:center;gap:10px;padding:8px;border-radius:10px;cursor:pointer}
+.platform:hover{background:#f1f5ff}
+.platform .icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:white;font-weight:700}
+
+.saved-search{display:flex;align-items:center;justify-content:space-between;padding:8px;border-radius:8px;border:1px solid transparent}
+.saved-search:hover{background:#f8fafc}
+
+/* Middle: Inbox */
+.inbox-header{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.controls{display:flex;gap:8px;align-items:center}
+.btn{background:var(--primary); color:white; border:none; padding:8px 12px; border-radius:10px; cursor:pointer; font-weight:600}
+.btn.ghost{background:transparent; color:var(--muted); border:1px solid var(--border)}
+
+.inbox-list{margin-top:12px; display:flex; flex-direction:column; gap:10px}
+.conv-item{display:flex;gap:12px;padding:12px;border-radius:10px;cursor:pointer; border:1px solid transparent}
+.conv-item:hover{background:#fbfdff}
+.conv-item.unread{border-left:4px solid var(--primary); background:linear-gradient(90deg, rgba(37,99,235,0.04), transparent)}
+
+/* conv item parts */
+.conv-left{width:66px;display:flex;flex-direction:column;align-items:center;gap:6px}
+.platform-icon{width:48px;height:48px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:white;font-weight:700}
+.conv-body{flex:1}
+.conv-body h4{margin:0;font-size:15px}
+.conv-body p{margin:6px 0 0 0;color:var(--muted);font-size:13px}
+.conv-meta{min-width:96px;text-align:right;font-size:13px;color:var(--muted)}
+
+/* RIGHT: detail */
+.lead-card{padding:12px;border-radius:10px;border:1px solid var(--border); background:linear-gradient(180deg,#ffffff,#fcfdff)}
+.lead-row{display:flex;gap:12px;align-items:center}
+.lead-avatar{width:56px;height:56px;border-radius:10px;background:linear-gradient(90deg,var(--primary),var(--accent));display:flex;align-items:center;justify-content:center;color:white;font-weight:800}
+.lead-actions{display:flex;gap:8px;margin-top:10px}
+
+/* chat area inside right panel */
+.chat-area{margin-top:12px;padding:10px;border-radius:10px;border:1px dashed var(--border); height:44vh; overflow:auto; background:#fbfcfe}
+.msg-row{display:flex;gap:10px;align-items:flex-end;max-width:80%;margin-bottom:12px}
+.msg-in{justify-content:flex-start}
+.msg-out{justify-content:flex-end}
+.msg-bubble{padding:10px 12px;border-radius:12px;background:#f1f5ff; font-size:14px}
+.msg-bubble.out{background:linear-gradient(90deg,var(--primary),var(--accent)); color:white}
+.msg-meta{font-size:12px;color:var(--muted); margin-top:6px}
+.msg-icon{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:white;font-weight:700}
+
+/* attachments */
+.attachment{margin-top:8px;padding:8px;border-radius:8px;border:1px solid var(--border);display:flex;align-items:center;gap:8px;background:white}
+
+/* composer */
+.composer{display:flex;gap:8px;align-items:center;margin-top:12px}
+.composer textarea{flex:1;padding:10px;border-radius:10px;border:1px solid var(--border);min-height:60px}
+.quick-templates{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.template{padding:6px 10px;border-radius:999px;border:1px solid var(--border);background:#fff;color:var(--muted);cursor:pointer}
+
+/* modal (simple) */
+.modal-back{position:fixed;left:0;top:0;right:0;bottom:0;background:rgba(15,23,36,0.35);display:none;align-items:center;justify-content:center;z-index:50}
+.modal{width:420px;background:white;padding:16px;border-radius:12px;border:1px solid var(--border);box-shadow:0 20px 50px rgba(2,6,23,0.2)}
+.modal.show{display:flex}
+
+/* stats */
+.stats{display:flex;gap:8px;margin-top:8px}
+.stat{background:white;padding:10px;border-radius:10px;border:1px solid var(--border);flex:1;text-align:center}
+
+/* responsive */
+@media (max-width:1100px){
+  .container{grid-template-columns:1fr; padding:10px}
+  .panel{height:auto}
+  header{flex-direction:column;align-items:stretch;gap:10px}
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <!-- header -->
+  <div class="header">
+    <div class="brand">
+      <div class="logo">UL</div>
+      <div>
+        <div style="font-weight:800">Unified Social Leads</div>
+        <div class="small muted">All platforms • Centralized Inbox</div>
+      </div>
+    </div>
+
+    <div class="search">
+      <input id="searchInput" placeholder="Search messages, leads, contacts..." aria-label="Search"/>
+    </div>
+
+    <div style="display:flex;gap:10px;align-items:center">
+      <div class="small muted" id="topStats">Messages: 0 • Open Leads: 0</div>
+      <button class="btn" id="newLeadBtn">New Lead</button>
+    </div>
+  </div>
+
+  <!-- LEFT panel -->
+  <aside class="panel" aria-label="Platforms and Filters">
+    <div>
+      <div class="section-title">Platforms</div>
+      <div id="platforms">
+        <!-- filled by JS -->
+      </div>
+    </div>
+
+    <hr style="margin:12px 0;border:none;height:8px;background:transparent"/>
+
+    <div>
+      <div class="section-title">Saved Searches</div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px">
+        <div class="saved-search" onclick="applySaved('hot')"><div>Hot Leads</div><div class="small muted">8</div></div>
+        <div class="saved-search" onclick="applySaved('unassigned')"><div>Unassigned</div><div class="small muted">4</div></div>
+        <div class="saved-search" onclick="applySaved('overdue')"><div>Overdue</div><div class="small muted">2</div></div>
+      </div>
+    </div>
+
+    <hr style="margin:12px 0;border:none;height:8px;background:transparent"/>
+
+    <div>
+      <div class="section-title">Filters</div>
+      <div style="display:flex;gap:8px;margin-top:8px">
+        <select id="filterStatus" style="flex:1;padding:8px;border-radius:8px;border:1px solid var(--border)">
+          <option value="all">All statuses</option>
+          <option value="new">New</option>
+          <option value="contacted">Contacted</option>
+          <option value="interested">Interested</option>
+          <option value="won">Won</option>
+        </select>
+      </div>
+    </div>
+
+    <div style="margin-top:14px">
+      <div class="section-title">Agents</div>
+      <div style="margin-top:8px;display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;gap:10px;align-items:center">
+          <div style="width:44px;height:44px;border-radius:8px;background:linear-gradient(90deg,#2563eb,#06b6d4);color:white;display:flex;align-items:center;justify-content:center">AH</div>
+          <div><strong>Ali Haider</strong><div class="small muted">Sales • 12 open</div></div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:center">
+          <div style="width:44px;height:44px;border-radius:8px;background:#9ca3af;color:white;display:flex;align-items:center;justify-content:center">SR</div>
+          <div><strong>Sara Khan</strong><div class="small muted">Support • 4 open</div></div>
+        </div>
+      </div>
+    </div>
+
+  </aside>
+
+  <!-- MIDDLE: Inbox -->
+  <main class="panel" aria-label="Inbox">
+    <div class="inbox-header">
+      <div>
+        <div style="font-weight:800">Unified Inbox</div>
+        <div class="small muted">Recent conversations across platforms</div>
+      </div>
+
+      <div class="controls">
+        <select id="sortSelect" style="padding:8px;border-radius:8px;border:1px solid var(--border)">
+          <option value="recent">Most recent</option>
+          <option value="unread">Unread first</option>
+        </select>
+        <button class="btn ghost" id="refreshBtn">Refresh</button>
+        <button class="btn" id="bulkAssign">Assign</button>
+      </div>
+    </div>
+
+    <div class="stats" style="margin-top:12px">
+      <div class="stat"><div style="font-weight:700" id="statMessages">0</div><div class="small muted">Messages today</div></div>
+      <div class="stat"><div style="font-weight:700" id="statOpen">0</div><div class="small muted">Open leads</div></div>
+      <div class="stat"><div style="font-weight:700" id="statResp">6m</div><div class="small muted">Avg response</div></div>
+    </div>
+
+    <div class="inbox-list" id="inboxList" role="list" aria-label="Conversations" style="margin-top:12px">
+      <!-- conversations inserted by JS -->
+    </div>
+  </main>
+
+  <!-- RIGHT: Lead detail & conversation -->
+  <aside class="panel" aria-label="Lead details">
+    <div class="lead-card">
+      <div class="lead-row">
+        <div class="lead-avatar" id="leadAvatar">—</div>
+        <div style="flex:1">
+          <div style="font-weight:800" id="leadName">Select a conversation</div>
+          <div class="small muted" id="leadSource">Platform • Last activity</div>
+        </div>
+      </div>
+
+      <div class="lead-actions">
+        <button class="btn" id="assignAction">Assign</button>
+        <button class="btn ghost" id="convertAction">Convert</button>
+        <button class="btn" id="invoiceAction">Create Invoice</button>
+      </div>
+
+      <div style="margin-top:12px; display:grid; grid-template-columns:1fr 1fr; gap:8px">
+        <div>
+          <div class="small muted">Email</div>
+          <div id="leadEmail">—</div>
+        </div>
+        <div>
+          <div class="small muted">Phone</div>
+          <div id="leadPhone">—</div>
+        </div>
+        <div style="grid-column:1/-1">
+          <div class="small muted">Tags</div>
+          <div id="leadTags" style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap"></div>
+        </div>
+        <div>
+          <div class="small muted">Stage</div>
+          <div id="leadStage">—</div>
+        </div>
+        <div>
+          <div class="small muted">Score</div>
+          <div id="leadScore">—</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chat-area" id="chatArea" aria-live="polite" style="margin-top:12px">
+      <div class="small muted">Open a conversation to see messages (platform icons show source)</div>
+    </div>
+
+    <div class="composer">
+      <textarea id="composer" placeholder="Write a reply..."></textarea>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <button class="btn" id="sendBtn">Send</button>
+        <button class="btn ghost" id="addNoteBtn">Add Note</button>
+      </div>
+    </div>
+
+    <div class="quick-templates" style="margin-top:8px">
+      <div class="template" data-tmpl="Thanks for reaching out! We'll get back shortly.">Thanks — quick</div>
+      <div class="template" data-tmpl="Can you share phone number so we can call?">Ask contact</div>
+      <div class="template" data-tmpl="We can schedule a free demo — when is good for you?">Schedule demo</div>
+    </div>
+  </aside>
+
+</div>
+
+<!-- Modal: Assign -->
+<div class="modal-back" id="assignModal">
+  <div class="modal" role="dialog" aria-modal="true" aria-label="Assign conversation">
+    <h3 style="margin-top:0">Assign Conversation</h3>
+    <div style="margin-top:8px">
+      <label class="small muted">Assign to</label>
+      <select id="assignSelect" style="width:100%;padding:8px;border-radius:8px;border:1px solid var(--border);margin-top:6px">
+        <option value="Ali Haider">Ali Haider</option>
+        <option value="Sara Khan">Sara Khan</option>
+      </select>
+    </div>
+    <div style="margin-top:12px;display:flex;gap:8px;justify-content:flex-end">
+      <button class="btn ghost" onclick="closeModal('assignModal')">Cancel</button>
+      <button class="btn" id="confirmAssignBtn">Assign</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Invoice -->
+<div class="modal-back" id="invoiceModal">
+  <div class="modal" role="dialog" aria-modal="true" aria-label="Create invoice">
+    <h3 style="margin-top:0">Create Invoice</h3>
+    <div style="margin-top:8px">
+      <label class="small muted">Amount (USD)</label>
+      <input id="invoiceAmount" type="number" style="width:100%;padding:8px;border-radius:8px;border:1px solid var(--border);margin-top:6px" value="250"/>
+    </div>
+    <div style="margin-top:8px">
+      <label class="small muted">Description</label>
+      <input id="invoiceDesc" style="width:100%;padding:8px;border-radius:8px;border:1px solid var(--border);margin-top:6px" placeholder="Services / Package"/>
+    </div>
+    <div style="margin-top:12px;display:flex;gap:8px;justify-content:flex-end">
+      <button class="btn ghost" onclick="closeModal('invoiceModal')">Cancel</button>
+      <button class="btn" id="createInvoiceBtn">Create</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ---------- Sample Data ---------- */
+const data = [
+  { id:'c1', name:'Aisha Rizvi', platform:'facebook', last:'Interested in pricing for Package A', unread:true, assigned:'Ali Haider', email:'aisha@example.com', phone:'0300-111-2222', tags:['VIP','Campaign-A'], stage:'Contacted', score:85,
+    thread:[
+      {who:'in', text:'Hello, I need pricing for Package A.', time:'2025-12-08 09:12', hasAttachment:false},
+      {who:'out', text:'Hi Aisha — Package A starts at $200. Would you like details?', time:'2025-12-08 09:14', hasAttachment:false},
+      {who:'in', text:'Yes, please. Also do you offer onboarding?', time:'2025-12-08 09:18', hasAttachment:true, attachmentName:'brief.pdf'}
+    ]
+  },
+  { id:'c2', name:'Bilal Khan', platform:'whatsapp', last:'Any demo?', unread:false, assigned:null, email:'bilal@example.com', phone:'0300-222-3333', tags:[], stage:'New', score:42,
+    thread:[
+      {who:'in', text:'Is there a demo available today?', time:'2025-12-08 11:00', hasAttachment:false}
+    ]
+  },
+  { id:'c3', name:'Nida Ahmed', platform:'instagram', last:'Sent brief', unread:true, assigned:'Sara Khan', email:'nida@example.com', phone:'0300-333-4444', tags:['Lead','Inbound'], stage:'Interested', score:62,
+    thread:[
+      {who:'in', text:'I uploaded the brief — please confirm.', time:'2025-12-08 12:30', hasAttachment:true, attachmentName:'creative.jpg'}
+    ]
+  }
+];
+
+const platformMeta = {
+  facebook:{color:'#1877f2', short:'F', label:'Facebook'},
+  instagram:{color:'#E1306C', short:'IG', label:'Instagram'},
+  whatsapp:{color:'#25D366', short:'W', label:'WhatsApp'},
+  linkedin:{color:'#0a66c2', short:'IN', label:'LinkedIn'},
+  telegram:{color:'#2AABEE', short:'TG', label:'Telegram'}
+};
+
+/* ---------- State ---------- */
+let currentFilterPlatform = null;
+let selectedConversationId = null;
+
+/* ---------- Utilities ---------- */
+function el(q){ return document.querySelector(q) }
+function els(q){ return Array.from(document.querySelectorAll(q)) }
+function fmtTime(ts){ return ts } // simple for demo
+
+/* ---------- Render: platforms (left) ---------- */
+function renderPlatforms(){
+  const container = el('#platforms');
+  container.innerHTML = '';
+  Object.keys(platformMeta).forEach(k=>{
+    const meta = platformMeta[k];
+    const count = data.filter(d=>d.platform===k).length;
+    const div = document.createElement('div');
+    div.className = 'platform';
+    div.innerHTML = `
+      <div class="icon" style="background:${meta.color}">${meta.short}</div>
+      <div>
+        <div style="font-weight:700">${meta.label}</div>
+        <div class="small muted">${count} chats</div>
+      </div>
+    `;
+    div.addEventListener('click', ()=> { currentFilterPlatform = k; renderInbox(); });
+    container.appendChild(div);
+  });
+}
+
+/* ---------- Render: Inbox ---------- */
+function renderInbox(){
+  const list = el('#inboxList');
+  list.innerHTML = '';
+  const q = el('#searchInput').value.trim().toLowerCase();
+  let items = data.slice();
+  if(currentFilterPlatform) items = items.filter(it=>it.platform===currentFilterPlatform);
+  const status = el('#filterStatus').value;
+  if(status !== 'all') items = items.filter(it=> (it.stage||'').toLowerCase() === status.toLowerCase());
+  if(q) items = items.filter(it => (it.name + ' ' + it.last + ' ' + it.tags.join(' ')).toLowerCase().includes(q));
+  const sort = el('#sortSelect').value;
+  if(sort === 'unread') items.sort((a,b)=> (b.unread - a.unread));
+  // stats
+  el('#statMessages').textContent = data.reduce((s,c)=> s + c.thread.length,0);
+  el('#statOpen').textContent = data.filter(d=>d.stage !== 'Won' && d.stage !== 'Lost').length;
+  el('#topStats').textContent = `Messages: ${data.reduce((s,c)=> s + c.thread.length,0)} • Open Leads: ${data.length}`;
+  // render
+  items.forEach(conv=>{
+    const meta = platformMeta[conv.platform] || {color:'#6b7280', short:conv.platform[0].toUpperCase()};
+    const div = document.createElement('div');
+    div.className = 'conv-item ' + (conv.unread ? 'unread':'');
+    div.innerHTML = `
+      <div class="conv-left">
+        <div class="platform-icon" style="background:${meta.color}">${meta.short}</div>
+        <div class="small muted">${meta.label}</div>
+      </div>
+      <div class="conv-body">
+        <h4>${conv.name}</h4>
+        <p>${conv.last}</p>
+      </div>
+      <div class="conv-meta">
+        <div class="small muted">${conv.thread[conv.thread.length-1].time.split(' ')[1] || ''}</div>
+        <div style="height:6px"></div>
+        <div class="small">${conv.assigned || '<span style="color:#f59e0b">Unassigned</span>'}</div>
+      </div>
+    `;
+    div.addEventListener('click', ()=> openConversation(conv.id));
+    list.appendChild(div);
+  });
+}
+
+/* ---------- Open conversation (populate right panel) ---------- */
+function openConversation(id){
+  const conv = data.find(d=>d.id===id);
+  if(!conv) return;
+  selectedConversationId = id;
+  conv.unread = false;
+  // header
+  el('#leadName').textContent = conv.name;
+  el('#leadAvatar').textContent = conv.name.split(' ').map(s=>s[0]).slice(0,2).join('');
+  el('#leadSource').textContent = `${platformMeta[conv.platform].label} • Last: ${conv.thread[conv.thread.length-1].time}`;
+  el('#leadEmail').textContent = conv.email || '—';
+  el('#leadPhone').textContent = conv.phone || '—';
+  el('#leadTags').innerHTML = '';
+  (conv.tags || []).forEach(t=>{
+    const tag = document.createElement('div');
+    tag.style.padding='6px 8px'; tag.style.borderRadius='999px'; tag.style.border='1px solid var(--border)';
+    tag.style.fontSize='13px'; tag.textContent = t;
+    el('#leadTags').appendChild(tag);
+  });
+  el('#leadStage').textContent = conv.stage;
+  el('#leadScore').textContent = conv.score;
+
+  // chat area: render thread with platform icons and timestamps
+  const chat = el('#chatArea');
+  chat.innerHTML = '';
+  conv.thread.forEach(m=>{
+    const row = document.createElement('div');
+    row.className = 'msg-row ' + (m.who === 'in' ? 'msg-in' : 'msg-out');
+    const icon = document.createElement('div');
+    icon.className = 'msg-icon';
+    const meta = platformMeta[conv.platform] || {color:'#94a3b8', short:conv.platform[0].toUpperCase()};
+    icon.style.background = meta.color;
+    icon.textContent = meta.short;
+    const bubble = document.createElement('div');
+    bubble.className = 'msg-bubble ' + (m.who==='out' ? 'out':'');
+    bubble.innerHTML = `<div>${escapeHtml(m.text)}</div>
+                        <div class="msg-meta">${m.time}${m.hasAttachment ? ' • ' + '<span style="font-style:italic">attachment</span>' : ''}</div>`;
+    if(m.who === 'in'){
+      row.appendChild(icon); row.appendChild(bubble);
+    } else {
+      row.appendChild(bubble); row.appendChild(icon);
+    }
+    chat.appendChild(row);
+    // if attachment show small card
+    if(m.hasAttachment){
+      const att = document.createElement('div');
+      att.className = 'attachment';
+      att.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="opacity:.8"><path d="M21 8V16C21 19.3 18.3 22 15 22C11.7 22 9 19.3 9 16V8" stroke="#6b7280" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 10V8C7 5.2 9.2 3 12 3C14.8 3 17 5.2 17 8V16C17 18.2 15.2 20 13 20C10.8 20 9 18.2 9 16" stroke="#6b7280" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                       <div style="margin-left:8px"><div style="font-weight:700">${m.attachmentName || 'attachment'}</div><div class="small muted">Click to preview (demo)</div></div>`;
+      chat.appendChild(att);
+    }
+  });
+
+  // scroll to bottom
+  chat.scrollTop = chat.scrollHeight;
+  renderInbox();
+}
+
+/* ---------- Actions: Send, Assign, Convert, Invoice ---------- */
+el('#sendBtn').addEventListener('click', ()=>{
+  const text = el('#composer').value.trim();
+  if(!text){ alert('Write a message first'); return; }
+  if(!selectedConversationId){ alert('Select a conversation'); return; }
+  const conv = data.find(d=>d.id===selectedConversationId);
+  const now = new Date().toISOString().slice(0,16).replace('T',' ');
+  conv.thread.push({who:'out', text, time: now, hasAttachment:false});
+  conv.last = text;
+  el('#composer').value = '';
+  openConversation(selectedConversationId);
+});
+
+el('#assignAction').addEventListener('click', ()=> openModal('assignModal'));
+el('#convertAction').addEventListener('click', ()=> { if(!selectedConversationId){ alert('Select a conversation'); return; } alert('Converted to Opportunity (demo).'); });
+el('#invoiceAction').addEventListener('click', ()=> openModal('invoiceModal'));
+
+el('#confirmAssignBtn').addEventListener('click', ()=>{
+  const assignee = el('#assignSelect').value;
+  if(!selectedConversationId){ alert('Select a conversation'); closeModal('assignModal'); return; }
+  const conv = data.find(d=>d.id===selectedConversationId);
+  conv.assigned = assignee;
+  alert(`Assigned to ${assignee}`);
+  closeModal('assignModal');
+  openConversation(selectedConversationId);
+});
+
+el('#createInvoiceBtn').addEventListener('click', ()=>{
+  const amount = el('#invoiceAmount').value;
+  const desc = el('#invoiceDesc').value;
+  if(!selectedConversationId){ alert('Select a conversation'); closeModal('invoiceModal'); return; }
+  // simulate invoice creation
+  alert(`Invoice created: $${amount} — ${desc} (simulated)`);
+  closeModal('invoiceModal');
+});
+
+/* ---------- Quick templates ---------- */
+els('.template').forEach(t=>{
+  t.addEventListener('click', (e)=>{
+    el('#composer').value = t.dataset.tmpl;
+  });
+});
+
+/* ---------- Saved searches ---------- */
+function applySaved(key){
+  if(key === 'hot'){
+    el('#searchInput').value = 'VIP';
+  } else if(key === 'unassigned'){
+    el('#searchInput').value = 'Unassigned';
+  } else if(key === 'overdue'){
+    el('#searchInput').value = 'overdue';
+  }
+  renderInbox();
+}
+
+/* ---------- Modal helpers ---------- */
+function openModal(id){ el('#' + id).style.display = 'flex'; }
+function closeModal(id){ el('#' + id).style.display = 'none'; }
+
+/* ---------- Utilities ---------- */
+function escapeHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+/* ---------- Init ---------- */
+renderPlatforms();
+renderInbox();
+
+// search, filters
+el('#searchInput').addEventListener('input', ()=> renderInbox());
+el('#filterStatus').addEventListener('change', ()=> renderInbox());
+el('#sortSelect').addEventListener('change', ()=> renderInbox());
+el('#refreshBtn').addEventListener('click', ()=> { alert('Refreshed (demo)'); renderInbox(); });
+
+// keyboard shortcut: Ctrl+N -> new lead
+window.addEventListener('keydown', (e)=> { if(e.ctrlKey && e.key === 'n'){ e.preventDefault(); const name = prompt('New lead name (demo):','New Lead'); if(name){ const id = 'c' + (data.length+1); data.unshift({id,name,platform:'facebook',last:'New lead',unread:true,assigned:null,email:'',phone:'',tags:[],stage:'New',score:10,thread:[{who:'in',text:'New lead created',time:new Date().toISOString().slice(0,16).replace('T',' '),hasAttachment:false}]}); renderInbox(); alert('Lead created (demo)'); } } });
+
+</script>
+</body>
+</html>
