@@ -1,1 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>ERP Demo — Modules Preview</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .module-card { transition: transform .12s, box-shadow .12s; }
+    .module-card:hover { transform: translateY(-4px); box-shadow: 0 10px 20px rgba(2,6,23,.08); }
+    iframe { border: 0; width: 100%; height: 100%; }
+    @media (max-width: 1024px) {
+      .desktop-layout { flex-direction: column; }
+      #left { width: 100%; max-height: 260px; overflow:auto; }
+      #right { height: 60vh; }
+    }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans">
+  <header class="bg-white shadow-sm sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <img src="https://mlcneylnm22t.i.optimole.com/w:948/h:335/q:mauto/ig:avif/id:333301f2cf01e60c267d3b7b689a691a/https://skillsrator.com/SKILLSRATOR-LOGO-with-tagline-01.png" alt="logo" style="width:92px;">
+        <h1 class="text-lg font-semibold">ERP Demo — Modules preview</h1>
+      </div>
+      <div class="text-sm text-gray-500">Public demo: <span class="font-medium text-indigo-600">professorwired.github.io/erpdemo/</span></div>
+    </div>
+  </header>
 
+  <main class="max-w-7xl mx-auto p-4 lg:p-6 flex desktop-layout gap-6" style="min-height:calc(100vh - 88px);">
+    <!-- LEFT: module list -->
+    <aside id="left" class="w-96 bg-white rounded-xl shadow-sm p-4 flex-shrink-0">
+      <h2 class="text-sm font-medium text-gray-600 mb-3">Modules (click to preview)</h2>
+
+      <div class="space-y-3">
+        <!-- card template: update hrefs if your filenames differ -->
+        <div class="module-card p-3 bg-white rounded-lg border flex items-center justify-between">
+          <div>
+            <div class="text-sm font-semibold">Dashboard</div>
+            <div class="text-xs text-gray-500">Overview & KPIs</div>
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="loadPreview('dashboard.html')" class="px-3 py-1 text-sm rounded bg-indigo-50 text-indigo-700">Preview</button>
+            <a href="https://professorwired.github.io/erpdemo/dashboard.html" target="_blank" class="text-xs text-gray-400">Open</a>
+          </div>
+        </div>
+
+        <div class="module-card p-3 bg-white rounded-lg border flex items-center justify-between">
+          <div>
+            <div class="text-sm font-semibold">AI Chatbot</div>
+            <div class="text-xs text-gray-500">Chatbot / bots panel</div>
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="loadPreview('chatbots.html')" class="px-3 py-1 text-sm rounded bg-indigo-50 text-indigo-700">Preview</button>
+            <a href="https://professorwired.github.io/erpdemo/chatbots.html" target="_blank" class="text-xs text-gray-400">Open</a>
+          </div>
+        </div>
+
+        <div class="module-card p-3 bg-white rounded-lg border flex items-center justify-between">
+          <div>
+            <div class="text-sm font-semibold">Enrollments</div>
+            <div class="text-xs text-gray-500">Students / enrollments</div>
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="loadPreview('enrollment.html')" class="px-3 py-1 text-sm rounded bg-indigo-50 text-indigo-700">Preview</button>
+            <a href="https://professorwired.github.io/erpdemo/enrollment.html" target="_blank" class="text-xs text-gray-400">Open</a>
+          </div>
+        </div>
+
+        <div class="module-card p-3 bg-white rounded-lg border flex items-center justify-between">
+          <div>
+            <div class="text-sm font-semibold">Finance</div>
+            <div class="text-xs text-gray-500">Revenue & expense views</div>
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="loadPreview('finance.html')" class="px-3 py-1 text-sm rounded bg-indigo-50 text-indigo-700">Preview</button>
+            <a href="https://professorwired.github.io/erpdemo/finance.html" target="_blank" class="text-xs text-gray-400">Open</a>
+          </div>
+        </div>
+
+        <div class="module-card p-3 bg-white rounded-lg border flex items-center justify-between">
+          <div>
+            <div class="text-sm font-semibold">Social Inbox</div>
+            <div class="text-xs text-gray-500">Unified messages</div>
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="loadPreview('socialinboxes.html')" class="px-3 py-1 text-sm rounded bg-indigo-50 text-indigo-700">Preview</button>
+            <a href="https://professorwired.github.io/erpdemo/socialinboxes.html" target="_blank" class="text-xs text-gray-400">Open</a>
+          </div>
+        </div>
+
+        <div class="module-card p-3 bg-white rounded-lg border flex items-center justify-between">
+          <div>
+            <div class="text-sm font-semibold">Dashboard Graphs</div>
+            <div class="text-xs text-gray-500">Charts & trends</div>
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="loadPreview('dashboardgraph.html')" class="px-3 py-1 text-sm rounded bg-indigo-50 text-indigo-700">Preview</button>
+            <a href="https://professorwired.github.io/erpdemo/dashboardgraph.html" target="_blank" class="text-xs text-gray-400">Open</a>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="mt-4 text-xs text-gray-500">
+        Tip: Click "Preview" to open inside the page, or "Open" to load in a new tab.
+      </div>
+    </aside>
+
+    <!-- RIGHT: preview area -->
+    <section id="right" class="flex-1 bg-white rounded-xl shadow-sm overflow-hidden">
+      <div class="h-14 px-4 flex items-center justify-between border-b">
+        <div class="text-sm font-medium text-gray-700" id="preview-title">Select a module to preview</div>
+        <div class="text-xs text-gray-400">If a module needs more width, click "Open" to view separately.</div>
+      </div>
+
+      <div class="h-[calc(100%-56px)]">
+        <iframe id="preview-frame" src="" title="module-preview"></iframe>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const base = "https://professorwired.github.io/erpdemo/"; // change if your path differs
+    const iframe = document.getElementById('preview-frame');
+    const title = document.getElementById('preview-title');
+
+    function loadPreview(path) {
+      iframe.src = base + path;
+      title.textContent = 'Preview — ' + path;
+    }
+
+    // Optional: auto-load dashboard on open
+    loadPreview('dashboard.html');
+  </script>
+</body>
+</html>
