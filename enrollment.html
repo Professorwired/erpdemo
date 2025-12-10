@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <title>AI Automation Suite - Enrollments</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Modern Scrollbar for better UX */
+        .custom-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background-color: #cbd5e1; /* slate-300 */
+            border-radius: 3px;
+        }
+        .custom-scroll::-webkit-scrollbar-track {
+            background-color: #f8fafc; /* slate-50 */
+        }
+        /* Hide sidebar on small screens by default */
+        @media (max-width: 1023px) {
+            #sidebar {
+                transform: translateX(-100%);
+                position: absolute;
+                z-index: 30; /* Increased Z-index for mobile overlap */
+                transition: transform 0.3s ease-in-out;
+            }
+            #sidebar.open {
+                transform: translateX(0);
+                box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            }
+        }
+    </style>
+</head>
+<body class="h-screen w-full bg-gray-50 text-gray-800 font-sans antialiased">
+
+    <div id="notification-area" class="fixed top-4 right-4 z-50 space-y-2">
+        </div>
+
+    <button id="menu-toggle" class="lg:hidden fixed top-4 left-4 z-40 p-2 rounded-md bg-white shadow-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+        <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+    </button>
+
+    <div class="h-screen flex flex-col">
+        <header class="h-16 bg-white shadow-md flex items-center justify-between px-4 lg:px-6 z-10">
+           <div class="flex items-center gap-2 lg:gap-4">
+    <img 
+        src="https://mlcneylnm22t.i.optimole.com/w:948/h:335/q:mauto/ig:avif/id:333301f2cf01e60c267d3b7b689a691a/https://skillsrator.com/SKILLSRATOR-LOGO-with-tagline-01.png" 
+        alt="Skillsrator Logo" 
+        class="h-auto object-contain" 
+        style="width: 90px;"
+    />
+   
+</div>
+
+            <div class="flex items-center gap-3 lg:gap-4">
+                <div class="text-xs lg:text-sm text-gray-500 hidden sm:block">Branch: <span class="font-semibold text-indigo-600">Multan HQ</span></div>
+                <div class="w-8 h-8 rounded-full bg-indigo-200 border-2 border-indigo-500 flex items-center justify-center text-xs font-semibold text-indigo-800">U</div>
+            </div>
+        </header>
+
+        <div class="flex flex-1 overflow-hidden">
+            <aside id="sidebar" class="w-64 bg-white border-r py-6 flex-shrink-0 lg:static fixed h-full shadow-xl lg:shadow-none">
+                <nav id="main-nav" class="flex flex-col gap-2 px-4">
+                    <div data-target="dashboard" class="nav-item flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 text-gray-600 cursor-pointer transition duration-150">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                        <span class="text-sm">Dashboard</span>
+                    </div>
+                    <div data-target="social" class="nav-item flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 text-gray-600 cursor-pointer transition duration-150">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 4v-4z"></path></svg>
+                        <span class="text-sm">Social Inbox</span>
+                    </div>
+                    <div data-target="chatbot" class="nav-item flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 text-gray-600 cursor-pointer transition duration-150">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6a2 2 0 00-2-2H5a2 2 0 00-2 2v13m7 0h8a2 2 0 002-2V6a2 2 0 00-2-2h-2m-2 2H9m0 6h3"></path></svg>
+                        <span class="text-sm">AI Chatbot</span>
+                    </div>
+                    <div data-target="enrollments" class="nav-item flex items-center gap-3 p-3 rounded-xl bg-indigo-50 text-indigo-700 font-semibold cursor-pointer transition duration-150">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857m0 0a5.002 5.002 0 019.288 0M7 15h3m0 0l-3 3m3-3l-3-3m9 6h-3m0 0l3 3m-3-3l3-3m-6-4h.01M17 10h.01"></path></svg>
+                        <span class="text-sm">Enrollments</span>
+                    </div>
+                    <div data-target="finance" class="nav-item flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 text-gray-600 cursor-pointer transition duration-150">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8V9m0 4v1m-6-5h12a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V9a2 2 0 012-2z"></path></svg>
+                        <span class="text-sm">Finance</span>
+                    </div>
+                </nav>
+
+                <div class="mt-8 px-4">
+                    <div class="text-xs text-gray-400 tracking-wider uppercase mb-3">Quick Actions</div>
+                    <div class="flex flex-col gap-2">
+                        <button id="new-enrollment-btn" class="py-2 px-3 rounded-lg bg-indigo-500 text-white text-sm font-medium hover:bg-indigo-600 transition duration-150 flex items-center justify-center gap-2" onclick="showNotification('New Enrollment form opened!', 'indigo')">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                            New Enrollment
+                        </button>
+                    </div>
+                </div>
+            </aside>
+
+            <main id="main-content" class="flex-1 p-4 lg:p-6 overflow-y-auto custom-scroll">
+                
+                <header class="mb-6 pb-4 border-b border-gray-200 flex justify-between items-center">
+                    <h1 class="text-2xl font-bold text-gray-900 flex items-center gap-2">
+                        <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857m0 0a5.002 5.002 0 019.288 0M7 15h3m0 0l-3 3m3-3l-3-3m9 6h-3m0 0l3 3m-3-3l3-3m-6-4h.01M17 10h.01"></path></svg>
+                        Student Enrollments 🎓
+                    </h1>
+                    <button class="py-2 px-4 rounded-lg bg-indigo-500 text-white text-sm font-medium hover:bg-indigo-600 transition duration-150 flex items-center gap-2" onclick="showNotification('Exporting Enrollment Data (CSV)...', 'green')">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                        Export List
+                    </button>
+                </header>
+
+                <section class="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="p-5 bg-white rounded-xl shadow-lg border border-gray-100 enrollment-metric" data-metric="Active">
+                        <div class="text-sm font-medium text-gray-500">Active Students</div>
+                        <div class="text-3xl font-bold mt-1 text-gray-900">178</div>
+                        <div class="text-xs text-green-500 mt-1">Completion Rate: 45%</div>
+                    </div>
+                    <div class="p-5 bg-white rounded-xl shadow-lg border border-gray-100 enrollment-metric" data-metric="New">
+                        <div class="text-sm font-medium text-gray-500">New Enrollments (30 Days)</div>
+                        <div class="text-3xl font-bold mt-1 text-gray-900">42</div>
+                        <div class="text-xs text-indigo-500 mt-1">Source: AI Chatbot</div>
+                    </div>
+                    <div class="p-5 bg-white rounded-xl shadow-lg border border-gray-100 enrollment-metric" data-metric="Pending">
+                        <div class="text-sm font-medium text-gray-500">Pending Payments</div>
+                        <div class="text-3xl font-bold mt-1 text-gray-900">₨ 45,000</div>
+                        <div class="text-xs text-red-500 mt-1">12 Pending Installments</div>
+                    </div>
+                    <div class="p-5 bg-white rounded-xl shadow-lg border border-gray-100 enrollment-metric" data-metric="Churn">
+                        <div class="text-sm font-medium text-gray-500">Monthly Churn Rate</div>
+                        <div class="text-3xl font-bold mt-1 text-gray-900">2.5%</div>
+                        <div class="text-xs text-green-500 mt-1">Down from 3.1%</div>
+                    </div>
+                </section>
+
+                <section class="bg-white rounded-xl shadow-lg p-4 mb-6 flex flex-col md:flex-row gap-4 items-center">
+                    <div class="w-full md:w-1/3">
+                        <label for="search-input" class="sr-only">Search Students</label>
+                        <input type="text" id="search-input" placeholder="Search by name, email, or course..." class="w-full p-2 border border-gray-300 rounded-lg text-sm focus:ring-indigo-500 focus:border-indigo-500" onkeydown="handleSearch(event)">
+                    </div>
+                    
+                    <div class="w-full md:w-1/4">
+                        <label for="course-filter" class="sr-only">Filter by Course</label>
+                        <select id="course-filter" class="w-full p-2 border border-gray-300 rounded-lg text-sm focus:ring-indigo-500 focus:border-indigo-500" onchange="showNotification(`Filtered by Course: ${this.value}`, 'gray')">
+                            <option value="all">Filter by Course (All)</option>
+                            <option value="shopify">Shopify Mastery</option>
+                            <option value="ai">AI Essentials</option>
+                            <option value="crypto">Crypto Trading</option>
+                        </select>
+                    </div>
+
+                    <div class="w-full md:w-1/4">
+                        <label for="status-filter" class="sr-only">Filter by Status</label>
+                        <select id="status-filter" class="w-full p-2 border border-gray-300 rounded-lg text-sm focus:ring-indigo-500 focus:border-indigo-500" onchange="showNotification(`Filtered by Status: ${this.value}`, 'gray')">
+                            <option value="active">Active</option>
+                            <option value="pending">Pending Payment</option>
+                            <option value="completed">Completed</option>
+                            <option value="lapsed">Lapsed</option>
+                        </select>
+                    </div>
+
+                    <div class="w-full md:w-1/6">
+                        <button class="w-full py-2 px-4 rounded-lg bg-gray-100 text-gray-700 text-sm font-medium hover:bg-gray-200 transition" onclick="showNotification('Filters Reset!', 'gray')">
+                            Reset
+                        </button>
+                    </div>
+                </section>
+
+                <section class="bg-white rounded-xl shadow-lg p-6 overflow-x-auto">
+                    <h3 class="font-bold text-xl text-gray-900 mb-4">Current Student List (178)</h3>
+                    <table class="w-full text-left text-sm whitespace-nowrap" id="enrollment-table">
+                        <thead>
+                            <tr class="text-gray-500 text-xs uppercase tracking-wider border-b border-gray-200">
+                                <th class="py-3 px-1 sort-header cursor-pointer" data-sort="name">Student Name</th>
+                                <th class="py-3 px-1 sort-header cursor-pointer" data-sort="course">Course</th>
+                                <th class="py-3 px-1 sort-header cursor-pointer" data-sort="date">Enroll Date</th>
+                                <th class="py-3 px-1 sort-header cursor-pointer" data-sort="paid">Amount Paid</th>
+                                <th class="py-3 px-1 sort-header cursor-pointer" data-sort="progress">Progress</th>
+                                <th class="py-3 px-1 sort-header cursor-pointer" data-sort="status">Status</th>
+                                <th class="py-3 px-1">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="student-list">
+                            <tr class="enrollment-row border-b border-gray-100 hover:bg-gray-50 transition cursor-pointer" onclick="viewStudentDetails('Kiran F.')" data-name="Kiran F." data-paid="8000" data-course="AI Essentials" data-status="Active">
+                                <td class="py-3 px-1 font-medium text-gray-900">Kiran F.</td>
+                                <td class="py-3 px-1">AI Essentials</td>
+                                <td class="py-3 px-1 text-gray-600">Oct 2, 2025</td>
+                                <td class="py-3 px-1 text-green-600">₨ 8,000</td>
+                                <td class="py-3 px-1">
+                                    <div class="w-16 h-1 bg-gray-200 rounded-full"><div class="h-1 bg-indigo-500 rounded-full" style="width: 85%;"></div></div>
+                                </td>
+                                <td class="py-3 px-1"><span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">Active</span></td>
+                                <td class="py-3 px-1">
+                                    <button class="text-indigo-600 hover:text-indigo-800 text-sm font-medium" onclick="event.stopPropagation(); collectPayment('Kiran F.')">Collect</button>
+                                </td>
+                            </tr>
+                            <tr class="enrollment-row border-b border-gray-100 hover:bg-gray-50 transition cursor-pointer" onclick="viewStudentDetails('Zeeshan K.')" data-name="Zeeshan K." data-paid="2000" data-course="AI Essentials" data-status="Pending">
+                                <td class="py-3 px-1 font-medium text-gray-900">Zeeshan K.</td>
+                                <td class="py-3 px-1">AI Essentials</td>
+                                <td class="py-3 px-1 text-gray-600">Nov 15, 2025</td>
+                                <td class="py-3 px-1 text-yellow-600">₨ 2,000</td>
+                                <td class="py-3 px-1">
+                                    <div class="w-16 h-1 bg-gray-200 rounded-full"><div class="h-1 bg-indigo-500 rounded-full" style="width: 20%;"></div></div>
+                                </td>
+                                <td class="py-3 px-1"><span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">Pending</span></td>
+                                <td class="py-3 px-1">
+                                    <button class="text-indigo-600 hover:text-indigo-800 text-sm font-medium" onclick="event.stopPropagation(); collectPayment('Zeeshan K.')">Collect</button>
+                                </td>
+                            </tr>
+                            <tr class="enrollment-row border-b border-gray-100 hover:bg-gray-50 transition cursor-pointer" onclick="viewStudentDetails('Aamir S.')" data-name="Aamir S." data-paid="5000" data-course="Shopify Mastery" data-status="Active">
+                                <td class="py-3 px-1 font-medium text-gray-900">Aamir S.</td>
+                                <td class="py-3 px-1">Shopify Mastery</td>
+                                <td class="py-3 px-1 text-gray-600">Dec 1, 2025</td>
+                                <td class="py-3 px-1 text-green-600">₨ 5,000</td>
+                                <td class="py-3 px-1">
+                                    <div class="w-16 h-1 bg-gray-200 rounded-full"><div class="h-1 bg-indigo-500 rounded-full" style="width: 10%;"></div></div>
+                                </td>
+                                <td class="py-3 px-1"><span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">Active</span></td>
+                                <td class="py-3 px-1">
+                                    <button class="text-indigo-600 hover:text-indigo-800 text-sm font-medium" onclick="event.stopPropagation(); collectPayment('Aamir S.')">Collect</button>
+                                </td>
+                            </tr>
+                            <tr class="enrollment-row border-b border-gray-100 hover:bg-gray-50 transition cursor-pointer" onclick="viewStudentDetails('Bilal H.')" data-name="Bilal H." data-paid="7000" data-course="Crypto Trading" data-status="Completed">
+                                <td class="py-3 px-1 font-medium text-gray-900">Bilal H.</td>
+                                <td class="py-3 px-1">Crypto Trading</td>
+                                <td class="py-3 px-1 text-gray-600">May 1, 2025</td>
+                                <td class="py-3 px-1 text-green-600">₨ 7,000</td>
+                                <td class="py-3 px-1">
+                                    <div class="w-16 h-1 bg-gray-200 rounded-full"><div class="h-1 bg-indigo-500 rounded-full" style="width: 100%;"></div></div>
+                                </td>
+                                <td class="py-3 px-1"><span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">Completed</span></td>
+                                <td class="py-3 px-1">
+                                    <button class="text-gray-400 text-sm font-medium cursor-not-allowed">Collect</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <footer class="mt-8 text-center text-xs text-gray-400 py-4 border-t border-gray-200">
+                    &copy; 2025 AI Automation Suite. Enrollment Data Service.
+                </footer>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // --- Core Utility: Notification Toast ---
+        function showNotification(message, color) {
+            const area = document.getElementById('notification-area');
+            
+            let bgColor;
+            switch(color) {
+                case 'indigo': bgColor = 'bg-indigo-600'; break;
+                case 'green': bgColor = 'bg-green-600'; break;
+                case 'red': bgColor = 'bg-red-600'; break;
+                default: bgColor = 'bg-gray-600';
+            }
+
+            const toast = document.createElement('div');
+            toast.className = `p-3 rounded-lg shadow-xl text-white ${bgColor} transform translate-x-full transition-transform duration-300 ease-out flex items-center gap-2`;
+            toast.innerHTML = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> <span>${message}</span>`;
+            
+            area.appendChild(toast);
+
+            // Animate in
+            setTimeout(() => {
+                toast.style.transform = 'translateX(0)';
+            }, 10);
+
+            // Animate out and remove
+            setTimeout(() => {
+                toast.style.transform = 'translateX(120%)';
+                toast.addEventListener('transitionend', () => toast.remove());
+            }, 3000);
+        }
+
+        // --- Sidebar and Navigation Logic ---
+        const menuToggle = document.getElementById('menu-toggle');
+        const sidebar = document.getElementById('sidebar');
+        const navItems = document.querySelectorAll('.nav-item');
+
+        // Toggle mobile sidebar
+        menuToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('open');
+        });
+
+        // Handle navigation clicks
+        navItems.forEach(item => {
+            item.addEventListener('click', function() {
+                const target = this.getAttribute('data-target');
+
+                // Simulate content switch and notification
+                showNotification(`Simulating navigation to **${target.charAt(0).toUpperCase() + target.slice(1)}** page...`, 'indigo');
+
+                // Update active state (optional, as this page stands alone)
+                navItems.forEach(nav => {
+                    nav.classList.remove('bg-indigo-50', 'text-indigo-700', 'font-semibold');
+                    nav.classList.add('hover:bg-gray-50', 'text-gray-600');
+                });
+                this.classList.add('bg-indigo-50', 'text-indigo-700', 'font-semibold');
+                this.classList.remove('hover:bg-gray-50', 'text-gray-600');
+
+                // Close sidebar on mobile after clicking
+                if (window.innerWidth < 1024) {
+                    sidebar.classList.remove('open');
+                }
+            });
+        });
+
+        // --- Enrollment Specific Functionality ---
+
+        // Metric Card Click
+        document.querySelectorAll('.enrollment-metric').forEach(card => {
+            card.addEventListener('click', function() {
+                const metric = this.getAttribute('data-metric');
+                showNotification(`Drilling down into **${metric}** enrollment metrics...`, 'gray');
+            });
+        });
+
+        // Search Input Functionality (on Enter key)
+        function handleSearch(event) {
+            if (event.key === 'Enter') {
+                const query = document.getElementById('search-input').value.trim();
+                if (query.length > 0) {
+                    showNotification(`Searching for student: **${query}**`, 'indigo');
+                    // In a real application, you would filter the student-list table data here.
+                } else {
+                    showNotification('Search input is empty.', 'red');
+                }
+            }
+        }
+        
+        // Table Action: View Student Details (on row click)
+        window.viewStudentDetails = function(studentName) {
+            showNotification(`Opening detailed profile for **${studentName}**...`, 'green');
+        }
+
+        // Table Action: Collect Payment (on button click)
+        window.collectPayment = function(studentName) {
+            showNotification(`Launching payment modal for **${studentName}**'s installment.`, 'indigo');
+        }
+
+        // Table Sorting Functionality (Mock implementation)
+        document.querySelectorAll('.sort-header').forEach(header => {
+            header.addEventListener('click', function() {
+                const sortBy = this.getAttribute('data-sort');
+                // Simulate sort direction toggle
+                const currentDir = this.getAttribute('data-dir') === 'asc' ? 'desc' : 'asc';
+                
+                // Reset styling
+                document.querySelectorAll('.sort-header').forEach(h => h.classList.remove('text-indigo-600'));
+                
+                // Update styling and attribute
+                this.classList.add('text-indigo-600');
+                this.setAttribute('data-dir', currentDir);
+                
+                showNotification(`Sorting list by **${sortBy}** (${currentDir.toUpperCase()})`, 'gray');
+                
+                // In a real app, you'd call a function to re-sort the HTML rows here.
+            });
+        });
+    </script>
+</body>
+</html>

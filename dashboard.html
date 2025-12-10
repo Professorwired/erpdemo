@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <title>AI Automation Suite - Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Modern Scrollbar for better UX */
+        .custom-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background-color: #cbd5e1; /* slate-300 */
+            border-radius: 3px;
+        }
+        .custom-scroll::-webkit-scrollbar-track {
+            background-color: #f8fafc; /* slate-50 */
+        }
+        /* Hide sidebar on small screens by default */
+        @media (max-width: 1023px) {
+            #sidebar {
+                transform: translateX(-100%);
+                position: absolute;
+                z-index: 20;
+                transition: transform 0.3s ease-in-out;
+            }
+            #sidebar.open {
+                transform: translateX(0);
+            }
+        }
+    </style>
+</head>
+<body class="h-screen w-full bg-gray-50 text-gray-800 font-sans antialiased">
+
+    <button id="menu-toggle" class="lg:hidden fixed top-4 left-4 z-30 p-2 rounded-md bg-white shadow-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+        <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+    </button>
+
+    <div class="h-screen flex flex-col">
+        <header class="h-16 bg-white shadow-md flex items-center justify-between px-4 lg:px-6 z-10">
+           <div class="flex items-center gap-2 lg:gap-4">
+    <img 
+        src="https://mlcneylnm22t.i.optimole.com/w:948/h:335/q:mauto/ig:avif/id:333301f2cf01e60c267d3b7b689a691a/https://skillsrator.com/SKILLSRATOR-LOGO-with-tagline-01.png" 
+        alt="Skillsrator Logo" 
+        class="h-auto object-contain" 
+        style="width: 90px;"
+    />
+</div>
+
+            <div class="flex items-center gap-3 lg:gap-4">
+                <div class="text-xs lg:text-sm text-gray-500 hidden sm:block">Branch: <span class="font-semibold text-indigo-600">Multan HQ</span></div>
+                <div class="w-8 h-8 rounded-full bg-indigo-200 border-2 border-indigo-500 flex items-center justify-center text-xs font-semibold text-indigo-800">U</div>
+            </div>
+        </header>
+
+        <div class="flex flex-1 overflow-hidden">
+            <aside id="sidebar" class="w-64 bg-white border-r py-6 flex-shrink-0 lg:static fixed h-full shadow-xl lg:shadow-none">
+                <nav class="flex flex-col gap-2 px-4">
+                    <div class="flex items-center gap-3 p-3 rounded-xl bg-indigo-50 text-indigo-700 font-semibold transition duration-150">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                        <span class="text-sm">Dashboard</span>
+                    </div>
+                    <div class="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 text-gray-600 transition duration-150">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 4v-4z"></path></svg>
+                        <span class="text-sm">Social Inbox</span>
+                    </div>
+                    <div class="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 text-gray-600 transition duration-150">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6a2 2 0 00-2-2H5a2 2 0 00-2 2v13m7 0h8a2 2 0 002-2V6a2 2 0 00-2-2h-2m-2 2H9m0 6h3"></path></svg>
+                        <span class="text-sm">AI Chatbot</span>
+                    </div>
+                    <div class="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 text-gray-600 transition duration-150">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M7 15h3m0 0l-3 3m3-3l-3-3m9 6h-3m0 0l3 3m-3-3l3-3m-6-4h.01M17 10h.01"></path></svg>
+                        <span class="text-sm">Enrollments</span>
+                    </div>
+                    <div class="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 text-gray-600 transition duration-150">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8V9m0 4v1m-6-5h12a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V9a2 2 0 012-2z"></path></svg>
+                        <span class="text-sm">Finance</span>
+                    </div>
+                </nav>
+
+                <div class="mt-8 px-4">
+                    <div class="text-xs text-gray-400 tracking-wider uppercase mb-3">Quick Actions</div>
+                    <div class="flex flex-col gap-2">
+                        <button class="py-2 px-3 rounded-lg bg-indigo-500 text-white text-sm font-medium hover:bg-indigo-600 transition duration-150 flex items-center justify-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                            New Post
+                        </button>
+                        <button class="py-2 px-3 rounded-lg bg-white border border-indigo-300 text-indigo-600 text-sm font-medium hover:bg-indigo-50 transition duration-150 flex items-center justify-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+                            New Enrollment
+                        </button>
+                    </div>
+                </div>
+            </aside>
+
+            <main class="flex-1 p-4 lg:p-6 overflow-y-auto custom-scroll">
+                <section class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 mb-6">
+                    <div class="p-4 bg-white rounded-xl shadow-lg border border-gray-100 flex flex-col transition-shadow hover:shadow-xl">
+                        <div class="flex justify-between items-start">
+                            <div class="text-xs font-medium text-gray-500 uppercase tracking-wider">Total Leads</div>
+                            <svg class="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                        </div>
+                        <div class="text-3xl font-bold mt-2 text-gray-900">324</div>
+                        <div class="text-xs text-green-500 mt-1">+12% vs last 30 days</div>
+                    </div>
+                    
+                    <div class="p-4 bg-white rounded-xl shadow-lg border border-gray-100 flex flex-col transition-shadow hover:shadow-xl">
+                        <div class="flex justify-between items-start">
+                            <div class="text-xs font-medium text-gray-500 uppercase tracking-wider">Converted</div>
+                            <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.001 12.001 0 002.944 12c.045 2.22 1.487 4.542 3.864 5.253A13.014 13.014 0 0012 21.042c1.782-.284 3.497-.732 5.074-1.282M12 8v4l3 3"></path></svg>
+                        </div>
+                        <div class="text-3xl font-bold mt-2 text-gray-900">210</div>
+                        <div class="text-xs text-green-500 mt-1">+8% vs last 30 days</div>
+                    </div>
+
+                    <div class="p-4 bg-white rounded-xl shadow-lg border border-gray-100 flex flex-col transition-shadow hover:shadow-xl">
+                        <div class="flex justify-between items-start">
+                            <div class="text-xs font-medium text-gray-500 uppercase tracking-wider">Active Students</div>
+                            <svg class="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857m0 0a5.002 5.002 0 019.288 0M7 15h3m0 0l-3 3m3-3l-3-3m9 6h-3m0 0l3 3m-3-3l3-3m-6-4h.01M17 10h.01"></path></svg>
+                        </div>
+                        <div class="text-3xl font-bold mt-2 text-gray-900">178</div>
+                        <div class="text-xs text-green-500 mt-1">Stable</div>
+                    </div>
+
+                    <div class="p-4 bg-white rounded-xl shadow-lg border border-gray-100 flex flex-col transition-shadow hover:shadow-xl">
+                        <div class="flex justify-between items-start">
+                            <div class="text-xs font-medium text-gray-500 uppercase tracking-wider">Revenue</div>
+                            <svg class="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8V9m0 4v1m-6-5h12a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V9a2 2 0 012-2z"></path></svg>
+                        </div>
+                        <div class="text-3xl font-bold mt-2 text-gray-900">₨ 1.2M</div>
+                        <div class="text-xs text-red-500 mt-1">-5% vs last 30 days</div>
+                    </div>
+
+                    <div class="p-4 bg-white rounded-xl shadow-lg border border-gray-100 flex flex-col transition-shadow hover:shadow-xl">
+                        <div class="flex justify-between items-start">
+                            <div class="text-xs font-medium text-gray-500 uppercase tracking-wider">Pending Tasks</div>
+                            <svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        </div>
+                        <div class="text-3xl font-bold mt-2 text-gray-900">56</div>
+                        <div class="text-xs text-red-500 mt-1">High Priority</div>
+                    </div>
+                </section>
+
+                <hr class="mb-6 border-gray-200">
+
+                <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+
+                    <div class="bg-white rounded-xl shadow-lg p-6 flex flex-col h-full min-h-[520px]">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="font-bold text-lg text-gray-900">Lead Funnel 📈</h3>
+                            <a href="#" class="text-sm font-medium text-indigo-600 hover:text-indigo-800 transition">View Report</a>
+                        </div>
+                        
+                        <div class="flex-1 bg-gray-50 rounded-lg p-4 flex flex-col justify-center items-center gap-3 mb-6">
+                            <div class="w-full h-4 bg-indigo-500 rounded-full flex items-center justify-between px-3 text-white font-medium text-xs">Leads (324)</div>
+                            <div class="w-5/6 h-4 bg-indigo-400 rounded-full flex items-center justify-center text-white font-medium text-xs">Qualified (280)</div>
+                            <div class="w-3/4 h-4 bg-indigo-300 rounded-full flex items-center justify-center text-white font-medium text-xs">Proposal (250)</div>
+                            <div class="w-1/2 h-4 bg-green-500 rounded-full flex items-center justify-center text-white font-medium text-xs">Converted (210)</div>
+                        </div>
+
+                        <div>
+                            <h4 class="text-sm font-bold text-gray-700 mb-2">Today's High-Priority Tasks 🎯</h4>
+                            <ul class="space-y-2 text-sm text-gray-600">
+                                <li class="flex items-center gap-2 p-2 bg-red-50 rounded-lg border border-red-200"><span class="text-red-500">→</span> Follow up with **Lead #245** (Stalled)</li>
+                                <li class="flex items-center gap-2 p-2 bg-yellow-50 rounded-lg border border-yellow-200"><span class="text-yellow-500">→</span> Approve **3 enrollment payments**</li>
+                                <li class="flex items-center gap-2 p-2 bg-indigo-50 rounded-lg border border-indigo-200"><span class="text-indigo-500">→</span> Review Chatbot Flows - **Live Test**</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-lg p-6 flex flex-col h-full min-h-[520px]">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="font-bold text-lg text-gray-900">Unified Social Inbox 💬</h3>
+                            <a href="#" class="text-sm font-medium text-gray-500 hover:text-gray-800 transition">Filters <span class="text-indigo-500">(3)</span></a>
+                        </div>
+                        
+                        <div class="flex-1 grid grid-cols-1 md:grid-cols-3 gap-4 custom-scroll">
+                            <div class="col-span-1 bg-gray-50 p-3 rounded-lg flex flex-col gap-2">
+                                <div class="text-xs text-gray-500 font-semibold mb-1">Platforms</div>
+                                <div class="flex items-center gap-2 p-2 rounded-lg bg-white shadow-sm border border-indigo-300 transition">
+                                    <div class="w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center text-white text-xs font-bold">f</div>
+                                    <div class="text-sm font-medium">Facebook</div>
+                                </div>
+                                <div class="flex items-center gap-2 p-2 rounded-lg bg-white shadow-sm hover:shadow-md transition">
+                                    <div class="w-6 h-6 bg-pink-600 rounded-full flex items-center justify-center text-white text-xs font-bold">in</div>
+                                    <div class="text-sm">Instagram</div>
+                                </div>
+                                <div class="flex items-center gap-2 p-2 rounded-lg bg-white shadow-sm hover:shadow-md transition">
+                                    <div class="w-6 h-6 bg-black rounded-full flex items-center justify-center text-white text-xs font-bold">T</div>
+                                    <div class="text-sm">TikTok</div>
+                                </div>
+                            </div>
+                            
+                            <div class="md:col-span-2 flex flex-col gap-3">
+                                <div class="flex items-center justify-between">
+                                    <div class="text-sm text-gray-500">Conversations (Newest)</div>
+                                    <div class="text-xs text-indigo-500">Sort: Time</div>
+                                </div>
+                                <div class="flex-1 space-y-2 max-h-[300px] md:max-h-full overflow-y-auto custom-scroll">
+                                    <div class="p-3 bg-indigo-50 rounded-lg shadow-md border border-indigo-400 cursor-pointer">
+                                        <div class="flex items-start justify-between">
+                                            <div class="flex items-center gap-3">
+                                                <div class="w-10 h-10 bg-indigo-200 rounded-full flex items-center justify-center text-xs font-semibold text-indigo-800">U1</div>
+                                                <div>
+                                                    <div class="text-sm font-bold text-indigo-800">User 1 • Instagram</div>
+                                                    <div class="text-xs text-gray-500 truncate">**NEW:** Is the Shopify course starting next week?</div>
+                                                </div>
+                                            </div>
+                                            <div class="text-xs text-indigo-500 font-semibold">2h ago</div>
+                                        </div>
+                                    </div>
+                                    <div class="p-3 bg-white rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition cursor-pointer">
+                                        <div class="flex items-start justify-between">
+                                            <div class="flex items-center gap-3">
+                                                <div class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center text-xs font-semibold text-gray-800">U2</div>
+                                                <div>
+                                                    <div class="text-sm font-medium">User 2 • Facebook</div>
+                                                    <div class="text-xs text-gray-500 truncate">Thanks for the info, I will check my email now.</div>
+                                                </div>
+                                            </div>
+                                            <div class="text-xs text-gray-400">3h ago</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-lg p-6 flex flex-col h-full min-h-[520px]">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="font-bold text-lg text-gray-900">Agent Performance 🏆</h3>
+                            <a href="#" class="text-sm font-medium text-gray-500 hover:text-gray-800 transition">Weekly</a>
+                        </div>
+                        
+                        <div class="mt-3 flex-1 overflow-y-auto custom-scroll space-y-3">
+                            <div class="flex items-center justify-between p-4 bg-indigo-50 rounded-xl border-l-4 border-indigo-500 shadow-sm">
+                                <div>
+                                    <div class="text-base font-bold text-indigo-800">Ali <span class="text-xs font-normal text-gray-500">(Top)</span></div>
+                                    <div class="text-xs text-gray-500">Replies: 50</div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-sm font-bold text-green-600">Conv Rate: 30%</div>
+                                    <div class="text-xs text-gray-500">Avg RT: 10m</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between p-4 bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition">
+                                <div>
+                                    <div class="text-base font-medium">Sara</div>
+                                    <div class="text-xs text-gray-500">Replies: 70</div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-sm font-medium text-green-600">Conv Rate: 40%</div>
+                                    <div class="text-xs text-gray-500">Avg RT: 18m</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between p-4 bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition">
+                                <div>
+                                    <div class="text-base font-medium">Aisha</div>
+                                    <div class="text-xs text-gray-500">Replies: 35</div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-sm font-medium text-red-600">Conv Rate: 15%</div>
+                                    <div class="text-xs text-gray-500">Avg RT: 25m</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 pt-4 border-t border-gray-100">
+                            <div class="text-sm font-bold text-gray-700 mb-2">Export Data</div>
+                            <div class="flex gap-2">
+                                <button class="px-3 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition">
+                                    <span class="font-bold text-red-600">PDF</span> Report
+                                </button>
+                                <button class="px-3 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition">
+                                    <span class="font-bold text-green-600">CSV</span> Data
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <section class="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="bg-white rounded-xl shadow-lg p-6 min-h-[400px]">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="font-bold text-lg text-gray-900">AI Chatbot Flow Builder 🤖</h3>
+                            <a href="#" class="text-sm font-medium text-indigo-600 hover:text-indigo-800 transition">Go to Builder</a>
+                        </div>
+                        <div class="h-[300px] bg-indigo-50 rounded-xl border-2 border-dashed border-indigo-300 p-4 flex flex-col items-center justify-center text-indigo-500 text-center text-base font-medium">
+                            <svg class="w-12 h-12 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                            Drag and Drop Nodes: Start Node → Question/Decision → Action (Enrollment, Tagging, Reply)
+                            <div class="text-xs text-gray-400 mt-2">Last saved: 15 minutes ago</div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-lg p-6 min-h-[400px] overflow-x-auto">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="font-bold text-lg text-gray-900">Recent Enrollments 🎓</h3>
+                            <a href="#" class="text-sm font-medium text-indigo-600 hover:text-indigo-800 transition">View All</a>
+                        </div>
+                        <table class="w-full text-left text-sm whitespace-nowrap">
+                            <thead>
+                                <tr class="text-gray-500 text-xs uppercase tracking-wider border-b border-gray-200">
+                                    <th class="py-3 px-1">Student</th>
+                                    <th class="py-3 px-1">Course</th>
+                                    <th class="py-3 px-1">Paid</th>
+                                    <th class="py-3 px-1">Pending</th>
+                                    <th class="py-3 px-1">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="border-b border-gray-100 hover:bg-gray-50 transition">
+                                    <td class="py-3 px-1 font-medium text-gray-900">Aamir S.</td>
+                                    <td class="py-3 px-1">Shopify Mastery</td>
+                                    <td class="py-3 px-1 text-green-600">₨ 5,000</td>
+                                    <td class="py-3 px-1 text-red-600">₨ 1,000</td>
+                                    <td class="py-3 px-1"><span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">Active</span></td>
+                                </tr>
+                                <tr class="border-b border-gray-100 hover:bg-gray-50 transition">
+                                    <td class="py-3 px-1 font-medium text-gray-900">Bilal H.</td>
+                                    <td class="py-3 px-1">Shopify Mastery</td>
+                                    <td class="py-3 px-1 text-green-600">₨ 7,000</td>
+                                    <td class="py-3 px-1 text-red-600">₨ 1,800</td>
+                                    <td class="py-3 px-1"><span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">Active</span></td>
+                                </tr>
+                                <tr class="border-b border-gray-100 hover:bg-gray-50 transition">
+                                    <td class="py-3 px-1 font-medium text-gray-900">Kiran F.</td>
+                                    <td class="py-3 px-1">AI Essentials</td>
+                                    <td class="py-3 px-1 text-green-600">₨ 8,000</td>
+                                    <td class="py-3 px-1 text-red-600">₨ 0</td>
+                                    <td class="py-3 px-1"><span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">Active</span></td>
+                                </tr>
+                                <tr class="border-b border-gray-100 hover:bg-gray-50 transition">
+                                    <td class="py-3 px-1 font-medium text-gray-900">Zeeshan K.</td>
+                                    <td class="py-3 px-1">AI Essentials</td>
+                                    <td class="py-3 px-1 text-green-600">₨ 2,000</td>
+                                    <td class="py-3 px-1 text-red-600">₨ 6,000</td>
+                                    <td class="py-3 px-1"><span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">Pending</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <footer class="mt-8 text-center text-xs text-gray-400 py-4 border-t border-gray-200">
+                    &copy; 2025 AI Automation Suite. All rights reserved.
+                </footer>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        const menuToggle = document.getElementById('menu-toggle');
+        const sidebar = document.getElementById('sidebar');
+
+        menuToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('open');
+        });
+
+        // Close sidebar when a navigation item is clicked on mobile
+        const navLinks = sidebar.querySelectorAll('nav div');
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth < 1024) {
+                    sidebar.classList.remove('open');
+                }
+            });
+        });
+        
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', (event) => {
+            if (window.innerWidth < 1024 && sidebar.classList.contains('open') && !sidebar.contains(event.target) && !menuToggle.contains(event.target)) {
+                sidebar.classList.remove('open');
+            }
+        });
+    </script>
+</body>
+</html>

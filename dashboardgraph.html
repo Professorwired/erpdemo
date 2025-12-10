@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skillsrator Dashboard - CRM/LMS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Custom Tailwind colors based on Skillsrator logo
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'skills-blue': '#1E1D5B',
+                        'skills-purple': '#6B3C8E',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom scrollbar for better visual appeal, especially in cards */
+        .custom-scroll::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .custom-scroll::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: #cbd5e1; /* slate-300 */
+            border-radius: 10px;
+        }
+
+        .custom-scroll::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; /* slate-400 */
+        }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans antialiased">
+
+    <div class="flex h-screen overflow-hidden">
+        
+        <aside class="w-64 bg-gray-900 flex flex-col fixed h-full z-20">
+            <div class="flex items-center justify-center h-16 border-b border-gray-800">
+                <h1 class="text-2xl font-bold text-skills-purple">Skillsrator</h1>
+            </div>
+
+            <nav class="flex-1 overflow-y-auto custom-scroll p-4 space-y-2">
+                <a href="#" class="flex items-center space-x-3 p-3 rounded-lg text-white bg-skills-blue font-semibold transition duration-150">
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l-2-2m2 2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+                    <span>Dashboard</span>
+                </a>
+                
+                <a href="#" class="flex items-center space-x-3 p-3 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition duration-150">
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.828-1.405M12 14V8m0 0h2m-2 0H8m6 6a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                    <span>CRM & Leads</span>
+                </a>
+                
+                <a href="#" class="flex items-center space-x-3 p-3 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition duration-150">
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.467 9.493 5.492 8.257 5.922m3.743.331a.25.25 0 01.372 0m-3.743-.331c1.236-.43 2.575-.405 3.743.018m0 0c.231.085.441.201.636.353M12 6.253c1.236.43 2.575.405 3.743.018m0 0c.231.085.441.201.636.353M12 6.253V13m0 0l-3-3m3 3l3-3"/></svg>
+                    <span>Courses (LMS)</span>
+                </a>
+
+                <a href="#" class="flex items-center space-x-3 p-3 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition duration-150">
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"/></svg>
+                    <span>Analytics</span>
+                </a>
+
+                <div class="border-t border-gray-800 my-4"></div>
+
+                <a href="#" class="flex items-center space-x-3 p-3 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition duration-150">
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
+                    <span>AI Tools</span>
+                </a>
+                <a href="#" class="flex items-center space-x-3 p-3 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition duration-150">
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.941 3.31 2.227 1.745 3.125a1.724 1.724 0 000 2.132c1.565.898-.212 4.065-1.745 3.125a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.941-3.31-2.227-1.745-3.125a1.724 1.724 0 000-2.132c-1.565-.898.212-4.065 1.745-3.125a1.724 1.724 0 002.573-1.066z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                    <span>Settings</span>
+                </a>
+            </nav>
+        </aside>
+
+        <div class="flex-1 flex flex-col overflow-y-auto ml-64">
+            
+            <header class="bg-white shadow-md sticky top-0 z-10 w-full">
+                <div class="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="flex justify-end items-center h-16">
+                        <div class="flex items-center">
+                            <button class="p-1 rounded-full text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-skills-purple mr-4">
+                                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405C18.21 15.01 18 14.504 18 14v-4c0-3.313-2.687-6-6-6S6 6.687 6 10v4c0 .504-.21 1.01-.595 1.405L4 17h5m6 0v2a3 3 0 11-6 0v-2m6 0h-6"/></svg>
+                            </button>
+                            <div class="ml-3 relative">
+                                <div>
+                                    <button type="button" class="max-w-xs bg-white flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-skills-blue" id="user-menu-button" aria-expanded="false" aria-haspopup="true">
+                                        <span class="sr-only">Open user menu</span>
+                                        <img class="h-8 w-8 rounded-full" src="https://via.placeholder.com/150/1E1D5B/FFFFFF?text=A" alt="Avatar">
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <main class="flex-1 max-w-7xl mx-auto py-6 sm:px-6 lg:px-8 w-full">
+                <div class="px-4 py-4 sm:px-0">
+
+                    <h2 class="text-2xl font-bold text-gray-900 mb-4">Welcome Back, Admin 👋</h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+
+                        <div class="bg-white rounded-xl shadow-lg p-5">
+                            <div class="flex items-start justify-between">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-500">Total Leads</p>
+                                    <p class="text-3xl font-bold text-gray-900 mt-1">1,452</p>
+                                </div>
+                                <div class="p-2 bg-indigo-100 rounded-full text-skills-blue">
+                                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.828-1.405M12 14v-2m0 0V8m0 4h2m-2 0H8m6-6a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                                </div>
+                            </div>
+                            <p class="mt-3 text-sm font-medium text-green-600">+12% vs last month</p>
+                        </div>
+
+                        <div class="bg-white rounded-xl shadow-lg p-5">
+                            <div class="flex items-start justify-between">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-500">Conversion Rate</p>
+                                    <p class="text-3xl font-bold text-gray-900 mt-1">18.5%</p>
+                                </div>
+                                <div class="p-2 bg-green-100 rounded-full text-green-600">
+                                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8L9 21"/></svg>
+                                </div>
+                            </div>
+                            <p class="mt-3 text-sm font-medium text-red-600">-2.1% vs last month</p>
+                        </div>
+
+                        <div class="bg-white rounded-xl shadow-lg p-5">
+                            <div class="flex items-start justify-between">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-500">Total Revenue</p>
+                                    <p class="text-3xl font-bold text-gray-900 mt-1">₨ 3.2M</p>
+                                </div>
+                                <div class="p-2 bg-yellow-100 rounded-full text-yellow-600">
+                                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 8h6m-3 0V4m0 4h.01M9 12h.01M12 12h.01M15 12h.01M18 12h.01M9 16h.01M12 16h.01M15 16h.01M18 16h.01M9 20h.01M12 20h.01M15 20h.01M18 20h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                </div>
+                            </div>
+                            <p class="mt-3 text-sm font-medium text-green-600">+8.5% vs last month</p>
+                        </div>
+
+                        <div class="bg-white rounded-xl shadow-lg p-5">
+                            <div class="flex items-start justify-between">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-500">Active Students</p>
+                                    <p class="text-3xl font-bold text-gray-900 mt-1">890</p>
+                                </div>
+                                <div class="p-2 bg-pink-100 rounded-full text-skills-purple">
+                                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.467 9.493 5.492 8.257 5.922m3.743.331a.25.25 0 01.372 0m-3.743-.331c1.236-.43 2.575-.405 3.743.018m0 0c.231.085.441.201.636.353M12 6.253c1.236.43 2.575.405 3.743.018m0 0c.231.085.441.201.636.353M12 6.253V13m0 0l-3-3m3 3l3-3"/></svg>
+                                </div>
+                            </div>
+                            <p class="mt-3 text-sm font-medium text-green-600">+5% vs last month</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+
+                        <div class="bg-white rounded-xl shadow-lg p-6 flex flex-col h-full min-h-[520px]">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="font-bold text-lg text-gray-900">Lead Funnel & Conversion Trend 📈</h3>
+                                <a href="#" class="text-sm font-medium text-skills-purple hover:text-skills-blue transition">View Report</a>
+                            </div>
+                            
+                            <div class="flex-1 flex flex-col bg-gray-50 rounded-lg p-4 mb-6">
+                                <div class="text-xs font-semibold text-gray-600 mb-4">Conversion Funnel Stages (Last 30 Days)</div>
+                                
+                                <div class="flex-1 flex flex-col items-center justify-center gap-3">
+                                    <div class="w-full max-w-xs text-center">
+                                        <div class="py-2 bg-skills-blue text-white font-medium text-xs rounded-t-lg shadow-md">Leads (324)</div>
+                                        <div class="h-2 bg-skills-blue w-2/3 mx-auto"></div>
+
+                                        <div class="py-2 bg-skills-purple text-white font-medium text-xs mt-2 shadow-md w-11/12 mx-auto">Qualified (280)</div>
+                                        <div class="h-2 bg-skills-purple w-1/2 mx-auto"></div>
+
+                                        <div class="py-2 bg-indigo-300 text-white font-medium text-xs mt-2 shadow-md w-4/5 mx-auto">Proposal (250)</div>
+                                        <div class="h-2 bg-indigo-300 w-1/3 mx-auto"></div>
+
+                                        <div class="py-2 bg-green-500 text-white font-medium text-xs mt-2 rounded-b-lg shadow-md w-3/5 mx-auto">Converted (210)</div>
+                                    </div>
+                                </div>
+
+                                <div class="mt-4 border-t pt-3">
+                                    <div class="text-xs font-semibold text-gray-600 mb-2">Weekly Conversion Rate Trend (%)</div>
+                                    <div class="h-20 flex justify-around items-end p-2 border-b border-l border-gray-300 relative">
+                                        <div class="absolute inset-0 z-0">
+                                            <svg class="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+                                                <path d="M0 80 L 25 50 L 50 60 L 75 30 L 100 40" fill="none" stroke="#6B3C8E" stroke-width="2" vector-effect="non-scaling-stroke"/>
+                                            </svg>
+                                        </div>
+                                        <div class="w-2 h-2 rounded-full bg-skills-purple absolute bottom-0 left-[0%]" style="bottom: 10px; left: 0; transform: translate(-50%, 50%);"></div>
+                                        <div class="text-xs absolute bottom-1 left-[0%] text-skills-purple font-bold" style="bottom: 15px; left: 0; transform: translateX(-50%);">5%</div>
+                                        
+                                        <div class="w-2 h-2 rounded-full bg-skills-purple absolute" style="bottom: 50px; left: 25%; transform: translate(-50%, 50%);"></div>
+                                        <div class="text-xs absolute text-skills-purple font-bold" style="bottom: 55px; left: 25%; transform: translateX(-50%);">15%</div>
+                                        
+                                        <div class="w-2 h-2 rounded-full bg-skills-purple absolute" style="bottom: 40px; left: 50%; transform: translate(-50%, 50%);"></div>
+                                        <div class="text-xs absolute text-skills-purple font-bold" style="bottom: 45px; left: 50%; transform: translateX(-50%);">10%</div>
+                                        
+                                        <div class="w-2 h-2 rounded-full bg-skills-purple absolute" style="bottom: 70px; left: 75%; transform: translate(-50%, 50%);"></div>
+                                        <div class="text-xs absolute text-skills-purple font-bold" style="bottom: 75px; left: 75%; transform: translateX(-50%);">20%</div>
+
+                                        <div class="w-2 h-2 rounded-full bg-skills-purple absolute" style="bottom: 60px; left: 100%; transform: translate(-50%, 50%);"></div>
+                                        <div class="text-xs absolute text-skills-purple font-bold" style="bottom: 65px; left: 100%; transform: translateX(-50%);">18%</div>
+                                        
+                                        <div class="text-xs text-gray-500 absolute -bottom-4 left-[0%]">Wk 1</div>
+                                        <div class="text-xs text-gray-500 absolute -bottom-4 left-[25%] -translate-x-1/2">Wk 2</div>
+                                        <div class="text-xs text-gray-500 absolute -bottom-4 left-[50%] -translate-x-1/2">Wk 3</div>
+                                        <div class="text-xs text-gray-500 absolute -bottom-4 left-[75%] -translate-x-1/2">Wk 4</div>
+                                        <div class="text-xs text-gray-500 absolute -bottom-4 left-[100%] -translate-x-1/2">Wk 5</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-xl shadow-lg p-6 flex flex-col h-full min-h-[520px]">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="font-bold text-lg text-gray-900">Marketing Channel Performance 📊</h3>
+                                <a href="#" class="text-sm font-medium text-skills-blue hover:text-skills-purple transition">Analyze Source</a>
+                            </div>
+
+                            <div class="mt-4 flex-1 flex flex-col bg-gray-50 rounded-lg p-4 custom-scroll overflow-y-auto">
+                                <div class="text-xs font-semibold text-gray-600 mb-4">Leads Generated by Channel (Monthly)</div>
+                                
+                                <div class="h-64 w-full flex flex-col justify-end p-2 border-l border-b border-gray-300 relative">
+                                    <div class="absolute left-0 -translate-x-full top-0 text-xs text-gray-500">200</div>
+                                    <div class="absolute left-0 -translate-x-full top-1/2 -translate-y-1/2 text-xs text-gray-500">100</div>
+                                    <div class="absolute left-0 -translate-x-full bottom-0 text-xs text-gray-500">0</div>
+
+                                    <div class="flex justify-around items-end h-full pt-4">
+                                        <div class="group w-8 bg-skills-blue rounded-t-sm relative hover:opacity-80 transition" style="height: 75%;">
+                                            <div class="text-xs text-gray-700 absolute -top-5 left-1/2 transform -translate-x-1/2 font-bold opacity-0 group-hover:opacity-100 transition duration-300">150</div>
+                                        </div>
+                                        <div class="group w-8 bg-skills-purple rounded-t-sm relative hover:opacity-80 transition" style="height: 90%;">
+                                            <div class="text-xs text-gray-700 absolute -top-5 left-1/2 transform -translate-x-1/2 font-bold opacity-0 group-hover:opacity-100 transition duration-300">180</div>
+                                        </div>
+                                        <div class="group w-8 bg-black rounded-t-sm relative hover:bg-gray-800 transition" style="height: 40%;">
+                                            <div class="text-xs text-gray-700 absolute -top-5 left-1/2 transform -translate-x-1/2 font-bold opacity-0 group-hover:opacity-100 transition duration-300">80</div>
+                                        </div>
+                                        <div class="group w-8 bg-green-500 rounded-t-sm relative hover:bg-green-600 transition" style="height: 60%;">
+                                            <div class="text-xs text-gray-700 absolute -top-5 left-1/2 transform -translate-x-1/2 font-bold opacity-0 group-hover:opacity-100 transition duration-300">120</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="flex justify-around mt-2 text-xs text-gray-600">
+                                    <span class="w-8 text-center truncate">FB</span>
+                                    <span class="w-8 text-center truncate">Insta</span>
+                                    <span class="w-8 text-center truncate">TikTok</span>
+                                    <span class="w-8 text-center truncate">Ref</span>
+                                </div>
+                                
+                                <div class="mt-6 space-y-2">
+                                    <div class="text-sm font-semibold text-gray-700">Key Metrics:</div>
+                                    <div class="flex justify-between text-sm text-gray-600 border-b pb-1">
+                                        <span>Highest Source:</span>
+                                        <span class="font-bold text-skills-purple">Instagram (180)</span>
+                                    </div>
+                                    <div class="flex justify-between text-sm text-gray-600">
+                                        <span>Cost Per Lead (Avg):</span>
+                                        <span class="font-bold text-red-600">₨ 450</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-xl shadow-lg p-6 flex flex-col h-full min-h-[520px]">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="font-bold text-lg text-gray-900">Agent Performance 🏆</h3>
+                                <a href="#" class="text-sm font-medium text-gray-500 hover:text-gray-800 transition">Weekly</a>
+                            </div>
+                            
+                            <div class="mt-3 flex-1 overflow-y-auto custom-scroll space-y-3">
+                                <div class="flex items-center justify-between p-4 bg-skills-blue/10 rounded-xl border-l-4 border-skills-blue shadow-sm">
+                                    <div>
+                                        <div class="text-base font-bold text-skills-blue">Ali <span class="text-xs font-normal text-gray-500">(Top)</span></div>
+                                        <div class="text-xs text-gray-500">Replies: 50</div>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="text-sm font-bold text-green-600">Conv Rate: 30%</div>
+                                        <div class="text-xs text-gray-500">Avg RT: 10m</div>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between p-4 bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition">
+                                    <div>
+                                        <div class="text-base font-medium">Sara</div>
+                                        <div class="text-xs text-gray-500">Replies: 70</div>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="text-sm font-medium text-green-600">Conv Rate: 40%</div>
+                                        <div class="text-xs text-gray-500">Avg RT: 18m</div>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between p-4 bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition">
+                                    <div>
+                                        <div class="text-base font-medium">Aisha</div>
+                                        <div class="text-xs text-gray-500">Replies: 35</div>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="text-sm font-medium text-red-600">Conv Rate: 15%</div>
+                                        <div class="text-xs text-gray-500">Avg RT: 25m</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-4 pt-4 border-t border-gray-100">
+                                <div class="text-sm font-bold text-gray-700 mb-2">Export Data</div>
+                                <div class="flex gap-2">
+                                    <button class="px-3 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition">
+                                        <span class="font-bold text-red-600">PDF</span> Report
+                                    </button>
+                                    <button class="px-3 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition">
+                                        <span class="font-bold text-green-600">CSV</span> Data
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <section class="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        
+                        <div class="bg-white rounded-xl shadow-lg p-6 min-h-[400px]">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="font-bold text-lg text-gray-900">AI Chatbot Flow Builder 🤖</h3>
+                                <a href="#" class="text-sm font-medium text-skills-purple hover:text-skills-blue transition">Go to Builder</a>
+                            </div>
+                            <div class="h-[300px] bg-skills-blue/10 rounded-xl border-2 border-dashed border-skills-blue/30 p-4 flex flex-col items-center justify-center relative overflow-hidden">
+                                
+                                <div class="w-24 h-10 bg-skills-blue text-white flex items-center justify-center rounded-lg shadow-lg absolute top-8 left-1/4 transform -translate-x-1/2">Start</div>
+                                
+                                <div class="w-32 h-10 bg-white border border-gray-300 text-gray-800 flex items-center justify-center rounded-lg shadow-lg absolute top-24 right-1/4 transform translate-x-1/2">Ask Price?</div>
+                                
+                                <div class="w-32 h-10 bg-green-500 text-white flex items-center justify-center rounded-lg shadow-lg absolute bottom-16 left-1/4 transform -translate-x-1/2">Action: Tag Lead</div>
+                                
+                                <div class="w-32 h-10 bg-skills-purple text-white flex items-center justify-center rounded-lg shadow-lg absolute bottom-8 right-1/4 transform translate-x-1/2">Reply: FAQ Answer</div>
+
+                                <svg class="absolute inset-0 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+                                    <path d="M25 15 L 75 35" fill="none" stroke="#1E1D5B" stroke-width="2" stroke-dasharray="4 2" vector-effect="non-scaling-stroke"/>
+                                    <path d="M75 35 L 25 75" fill="none" stroke="#10b981" stroke-width="2" vector-effect="non-scaling-stroke"/>
+                                    <text x="50" y="55" font-size="3" fill="#10b981">YES</text>
+                                    <path d="M75 35 L 75 85" fill="none" stroke="#6B3C8E" stroke-width="2" vector-effect="non-scaling-stroke"/>
+                                    <text x="70" y="60" font-size="3" fill="#6B3C8E">NO</text>
+                                    <path d="M25 85 L 25 95" fill="none" stroke="#10b981" stroke-width="2" vector-effect="non-scaling-stroke"/>
+
+                                    <polygon points="73,34 77,35 73,36" fill="#1E1D5B"/>
+                                    <polygon points="26,73 24,77 28,77" fill="#10b981"/>
+                                    <polygon points="74,83 76,87 78,83" fill="#6B3C8E"/>
+                                </svg>
+
+                                <div class="text-xs text-gray-400 mt-2 absolute bottom-2 right-4">Last saved: 15 minutes ago</div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-xl shadow-lg p-6 min-h-[400px] overflow-x-auto">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="font-bold text-lg text-gray-900">Recent Enrollments 🎓</h3>
+                                <a href="#" class="text-sm font-medium text-skills-blue hover:text-skills-purple transition">View All</a>
+                            </div>
+                            <table class="w-full text-left text-sm whitespace-nowrap">
+                                <thead>
+                                    <tr class="text-gray-500 text-xs uppercase tracking-wider border-b border-gray-200">
+                                        <th class="py-3 px-1">Student</th>
+                                        <th class="py-3 px-1">Course</th>
+                                        <th class="py-3 px-1">Paid</th>
+                                        <th class="py-3 px-1">Pending</th>
+                                        <th class="py-3 px-1">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-b border-gray-100 hover:bg-gray-50 transition">
+                                        <td class="py-3 px-1 font-medium text-gray-900">Aamir S.</td>
+                                        <td class="py-3 px-1">Shopify Mastery</td>
+                                        <td class="py-3 px-1 text-green-600">₨ 5,000</td>
+                                        <td class="py-3 px-1 text-red-600">₨ 1,000</td>
+                                        <td class="py-3 px-1"><span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">Active</span></td>
+                                    </tr>
+                                    <tr class="border-b border-gray-100 hover:bg-gray-50 transition">
+                                        <td class="py-3 px-1 font-medium text-gray-900">Bilal H.</td>
+                                        <td class="py-3 px-1">Shopify Mastery</td>
+                                        <td class="py-3 px-1 text-green-600">₨ 7,000</td>
+                                        <td class="py-3 px-1 text-red-600">₨ 1,800</td>
+                                        <td class="py-3 px-1"><span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">Active</span></td>
+                                    </tr>
+                                    <tr class="border-b border-gray-100 hover:bg-gray-50 transition">
+                                        <td class="py-3 px-1 font-medium text-gray-900">Kiran F.</td>
+                                        <td class="py-3 px-1">AI Essentials</td>
+                                        <td class="py-3 px-1 text-green-600">₨ 8,000</td>
+                                        <td class="py-3 px-1 text-red-600">₨ 0</td>
+                                        <td class="py-3 px-1"><span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">Active</span></td>
+                                    </tr>
+                                    <tr class="border-b border-gray-100 hover:bg-gray-50 transition">
+                                        <td class="py-3 px-1 font-medium text-gray-900">Zeeshan K.</td>
+                                        <td class="py-3 px-1">AI Essentials</td>
+                                        <td class="py-3 px-1 text-green-600">₨ 2,000</td>
+                                        <td class="py-3 px-1 text-red-600">₨ 6,000</td>
+                                        <td class="py-3 px-1"><span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">Pending</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                </div>
+            </main>
+        </div>
+    </div>
+
+</body>
+</html>

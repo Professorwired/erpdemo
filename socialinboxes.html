@@ -1,0 +1,429 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <title>AI Automation Suite - Social Inbox</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Modern Scrollbar for better UX */
+        .custom-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background-color: #cbd5e1; /* slate-300 */
+            border-radius: 3px;
+        }
+        .custom-scroll::-webkit-scrollbar-track {
+            background-color: #f8fafc; /* slate-50 */
+        }
+        /* Hide sidebar on small screens by default */
+        @media (max-width: 1023px) {
+            #sidebar {
+                transform: translateX(-100%);
+                position: absolute;
+                z-index: 20;
+                transition: transform 0.3s ease-in-out;
+            }
+            #sidebar.open {
+                transform: translateX(0);
+                box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            }
+        }
+        /* Mobile-first adjustment for the 3-panel layout */
+        .inbox-grid {
+            grid-template-columns: 1fr; /* Default: Single column */
+        }
+        @media (min-width: 1024px) { /* On large screens (lg) */
+            .inbox-grid {
+                grid-template-columns: 300px 1fr 300px; /* Three columns: List | Chat | Details */
+            }
+        }
+    </style>
+</head>
+<body class="h-screen w-full bg-gray-50 text-gray-800 font-sans antialiased">
+
+    <div id="notification-area" class="fixed top-4 right-4 z-50 space-y-2">
+        </div>
+
+    <button id="menu-toggle" class="lg:hidden fixed top-4 left-4 z-30 p-2 rounded-md bg-white shadow-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+        <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+    </button>
+
+    <div class="h-screen flex flex-col">
+        <header class="h-16 bg-white shadow-md flex items-center justify-between px-4 lg:px-6 z-10">
+            <div class="flex items-center gap-2 lg:gap-4">
+    <img 
+        src="https://mlcneylnm22t.i.optimole.com/w:948/h:335/q:mauto/ig:avif/id:333301f2cf01e60c267d3b7b689a691a/https://skillsrator.com/SKILLSRATOR-LOGO-with-tagline-01.png" 
+        alt="Skillsrator Logo" 
+        class="h-auto object-contain" 
+        style="width: 90px;"
+    />
+   
+</div>
+
+            <div class="flex items-center gap-3 lg:gap-4">
+                <div class="text-xs lg:text-sm text-gray-500 hidden sm:block">Branch: <span class="font-semibold text-indigo-600">Multan HQ</span></div>
+                <div class="w-8 h-8 rounded-full bg-indigo-200 border-2 border-indigo-500 flex items-center justify-center text-xs font-semibold text-indigo-800">U</div>
+            </div>
+        </header>
+
+        <div class="flex flex-1 overflow-hidden">
+            <aside id="sidebar" class="w-64 bg-white border-r py-6 flex-shrink-0 lg:static fixed h-full shadow-xl lg:shadow-none">
+                <nav id="main-nav" class="flex flex-col gap-2 px-4">
+                    <div data-target="dashboard" class="nav-item flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 text-gray-600 cursor-pointer transition duration-150">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                        <span class="text-sm">Dashboard</span>
+                    </div>
+                    <div data-target="social" class="nav-item flex items-center gap-3 p-3 rounded-xl bg-indigo-50 text-indigo-700 font-semibold cursor-pointer transition duration-150">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 4v-4z"></path></svg>
+                        <span class="text-sm">Social Inbox</span>
+                    </div>
+                    <div data-target="chatbot" class="nav-item flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 text-gray-600 cursor-pointer transition duration-150">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6a2 2 0 00-2-2H5a2 2 0 00-2 2v13m7 0h8a2 2 0 002-2V6a2 2 0 00-2-2h-2m-2 2H9m0 6h3"></path></svg>
+                        <span class="text-sm">AI Chatbot</span>
+                    </div>
+                    <div data-target="enrollments" class="nav-item flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 text-gray-600 cursor-pointer transition duration-150">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857m0 0a5.002 5.002 0 019.288 0M7 15h3m0 0l-3 3m3-3l-3-3m9 6h-3m0 0l3 3m-3-3l3-3m-6-4h.01M17 10h.01"></path></svg>
+                        <span class="text-sm">Enrollments</span>
+                    </div>
+                    <div data-target="finance" class="nav-item flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 text-gray-600 cursor-pointer transition duration-150">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8V9m0 4v1m-6-5h12a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V9a2 2 0 012-2z"></path></svg>
+                        <span class="text-sm">Finance</span>
+                    </div>
+                </nav>
+
+                <div class="mt-8 px-4">
+                    <div class="text-xs text-gray-400 tracking-wider uppercase mb-3">Quick Actions</div>
+                    <div class="flex flex-col gap-2">
+                        <button id="new-post-btn" class="py-2 px-3 rounded-lg bg-indigo-500 text-white text-sm font-medium hover:bg-indigo-600 transition duration-150 flex items-center justify-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                            New Post
+                        </button>
+                    </div>
+                </div>
+            </aside>
+
+            <main id="main-content" class="flex-1 p-0 lg:p-4 overflow-hidden">
+                <div class="flex flex-col h-full bg-white lg:rounded-xl lg:shadow-xl overflow-hidden">
+                    <header class="p-4 border-b border-gray-100 lg:p-6 flex justify-between items-center">
+                        <h1 class="text-xl lg:text-2xl font-bold text-gray-900 flex items-center gap-2">
+                            <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 4v-4z"></path></svg>
+                            Unified Social Inbox
+                        </h1>
+                        <div class="flex items-center gap-3">
+                            <button id="sort-btn" class="text-sm font-medium text-gray-500 hover:text-indigo-600 transition flex items-center gap-1">
+                                Sort: Latest <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </button>
+                            <button id="filter-btn" class="p-2 rounded-lg text-indigo-600 bg-indigo-50 hover:bg-indigo-100 transition lg:hidden">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707v3.586a1 1 0 01-1.447.894l-2.5-1A1 1 0 018 15.586V11.707a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path></svg>
+                            </button>
+                        </div>
+                    </header>
+
+                    <div class="flex-1 grid inbox-grid overflow-hidden">
+
+                        <div class="w-full h-full border-r border-gray-100 flex flex-col overflow-y-auto custom-scroll p-4 lg:static fixed z-10 bg-white lg:shadow-none shadow-2xl" id="conversation-list">
+                             <div class="mb-4 hidden lg:block">
+                                <input type="text" placeholder="Search conversations..." class="w-full p-2 border border-gray-200 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 text-sm">
+                            </div>
+
+                            <div class="mb-4 space-y-2 hidden lg:block" id="desktop-filters">
+                                <div class="text-xs text-gray-500 font-semibold uppercase tracking-wider mb-2">Platforms</div>
+                                <div class="flex flex-col gap-2">
+                                    <div class="platform-filter-item flex items-center gap-3 p-2 rounded-lg bg-indigo-50 text-indigo-700 transition cursor-pointer" data-platform="instagram">
+                                        <div class="w-6 h-6 bg-pink-600 rounded-full flex items-center justify-center text-white text-xs font-bold">in</div>
+                                        <div class="text-sm font-medium">Instagram <span class="text-xs font-normal">(4 New)</span></div>
+                                    </div>
+                                    <div class="platform-filter-item flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 text-gray-600 transition cursor-pointer" data-platform="facebook">
+                                        <div class="w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center text-white text-xs font-bold">f</div>
+                                        <div class="text-sm">Facebook</div>
+                                    </div>
+                                    <div class="platform-filter-item flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 text-gray-600 transition cursor-pointer" data-platform="tiktok">
+                                        <div class="w-6 h-6 bg-black rounded-full flex items-center justify-center text-white text-xs font-bold">T</div>
+                                        <div class="text-sm">TikTok</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="conversation-items" class="space-y-2 flex-1">
+                                <div class="conversation-item p-3 bg-indigo-100 rounded-xl shadow-md border-2 border-indigo-400 cursor-pointer transition hover:bg-indigo-200" data-user="Ayesha Khan">
+                                    <div class="flex items-start justify-between">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-10 h-10 bg-indigo-300 rounded-full flex items-center justify-center text-sm font-bold text-white">AK</div>
+                                            <div>
+                                                <div class="text-sm font-bold text-indigo-800">Ayesha Khan • Instagram</div>
+                                                <div class="text-xs text-gray-500 truncate">**You:** I'd be happy to share the course details...</div>
+                                            </div>
+                                        </div>
+                                        <div class="text-xs text-indigo-500 font-semibold">5m</div>
+                                    </div>
+                                </div>
+                                <div class="conversation-item p-3 bg-white rounded-xl shadow-sm border border-gray-100 cursor-pointer transition hover:bg-gray-50" data-user="Bilal Ahmed">
+                                    <div class="flex items-start justify-between">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-10 h-10 bg-red-300 rounded-full flex items-center justify-center text-sm font-bold text-white">BA</div>
+                                            <div>
+                                                <div class="text-sm font-bold text-gray-900">Bilal Ahmed • Facebook <span class="text-red-500 ml-1">•</span></div>
+                                                <div class="text-xs text-gray-500 truncate font-semibold">Do you offer any payment plans for the AI course?</div>
+                                            </div>
+                                        </div>
+                                        <div class="text-xs text-red-500 font-semibold">1h</div>
+                                    </div>
+                                </div>
+                                <div class="conversation-item p-3 bg-white rounded-xl shadow-sm border border-gray-100 cursor-pointer transition hover:bg-gray-50" data-user="Sara Imtiaz">
+                                    <div class="flex items-start justify-between">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-10 h-10 bg-green-300 rounded-full flex items-center justify-center text-sm font-bold text-white">SI</div>
+                                            <div>
+                                                <div class="text-sm font-medium text-gray-900">Sara Imtiaz • TikTok</div>
+                                                <div class="text-xs text-gray-500 truncate">Thanks! I just enrolled. Excited to start.</div>
+                                            </div>
+                                        </div>
+                                        <div class="text-xs text-gray-400">4h</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="w-full h-full flex flex-col overflow-hidden lg:shadow-none shadow-2xl lg:static fixed z-10 bg-white" id="chat-thread-panel">
+                            <div class="flex-1 overflow-y-auto custom-scroll p-4 space-y-4">
+                                <div class="flex justify-start">
+                                    <div class="max-w-xs lg:max-w-md bg-gray-100 p-3 rounded-xl rounded-tl-none text-sm shadow-sm">
+                                        Hi! I saw your ad for the Shopify course. Can I get more details on the curriculum and timings?
+                                        <div class="text-right text-xs text-gray-500 mt-1">Ayesha K. • 10:45 AM</div>
+                                    </div>
+                                </div>
+
+                                <div class="flex justify-end">
+                                    <div class="max-w-xs lg:max-w-md bg-indigo-500 text-white p-3 rounded-xl rounded-tr-none text-sm shadow-md">
+                                        Hello Ayesha! Yes, I'd be happy to share the course details. I've tagged you as a **"Hot Lead"** and sent a PDF to your DMs now. Let me know if you have any questions!
+                                        <div class="text-left text-xs text-indigo-200 mt-1">You (Ali) • 10:50 AM</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="text-center text-xs text-gray-400 py-2">
+                                    <span class="p-1 bg-yellow-50 rounded-full px-3">
+                                        <span class="font-bold">🤖 AI Tagging:</span> User tagged as 'Shopify Inquiry'
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="p-4 border-t border-gray-100 flex items-center gap-3 bg-white">
+                                <button class="p-2 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 transition" onclick="showNotification('Opening attachments menu...', 'gray')">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13.75"></path></svg>
+                                </button>
+                                <input type="text" id="message-input" placeholder="Type your reply or select an AI canned response..." class="flex-1 p-3 border border-gray-300 rounded-xl focus:ring-indigo-500 focus:border-indigo-500 text-sm" onkeydown="handleMessageInput(event)">
+                                <button class="p-3 rounded-xl bg-indigo-500 text-white hover:bg-indigo-600 transition" onclick="sendMessage()">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M12 5l7 7-7 7"></path></svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="w-full h-full border-l border-gray-100 flex-col overflow-y-auto custom-scroll p-4 hidden lg:flex">
+                            <h3 class="font-bold text-lg text-gray-900 mb-4 border-b pb-2">Ayesha Khan (Customer Profile)</h3>
+                            
+                            <div class="mb-6 space-y-2 text-sm">
+                                <p><span class="font-semibold text-gray-600">Platform:</span> Instagram</p>
+                                <p><span class="font-semibold text-gray-600">First Contact:</span> 1 Dec 2025</p>
+                                <p><span class="font-semibold text-gray-600">Email (Inferred):</span> ayesha.khan@example.com</p>
+                            </div>
+
+                            <div class="mb-6">
+                                <div class="text-xs text-gray-500 font-semibold uppercase mb-2">Lead Status</div>
+                                <select id="lead-status" class="w-full p-2 border border-gray-300 rounded-lg text-sm bg-white focus:ring-indigo-500 focus:border-indigo-500">
+                                    <option value="hot" selected class="bg-red-100">🔥 Hot Lead</option>
+                                    <option value="warm">💡 Warm - Responded</option>
+                                    <option value="cold">🧊 Cold - No Reply</option>
+                                    <option value="converted">✅ Converted (Student)</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-6">
+                                <div class="text-xs text-gray-500 font-semibold uppercase mb-2">Tags</div>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="tag-pill px-3 py-1 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800 cursor-pointer hover:bg-indigo-200">Shopify Inquiry</span>
+                                    <span class="tag-pill px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 cursor-pointer hover:bg-green-200">Price Ask</span>
+                                    <span class="tag-pill px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800 cursor-pointer hover:bg-gray-200">+ Add Tag</span>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <div class="text-xs text-gray-500 font-semibold uppercase mb-2">AI Suggestions</div>
+                                <button class="w-full text-left p-3 rounded-lg bg-yellow-50 text-yellow-800 text-sm hover:bg-yellow-100 transition" onclick="showNotification('AI sending follow-up message about course payment plans.', 'yellow')">
+                                    <span class="font-bold">Draft Reply:</span> Payment Plan follow-up.
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // --- Core Utility: Notification Toast ---
+        function showNotification(message, color) {
+            const area = document.getElementById('notification-area');
+            
+            let bgColor, icon;
+            switch(color) {
+                case 'indigo': bgColor = 'bg-indigo-600'; icon = '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>'; break;
+                case 'green': bgColor = 'bg-green-600'; icon = '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 018.618 3.04A12.001 12.001 0 002.944 12c.045 2.22 1.487 4.542 3.864 5.253A13.014 13.014 0 0012 21.042c1.782-.284 3.497-.732 5.074-1.282"></path></svg>'; break;
+                case 'red': bgColor = 'bg-red-600'; icon = '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>'; break;
+                case 'yellow': bgColor = 'bg-yellow-600'; icon = '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882l-7 7.5a1 1 0 00-1 0v7a1 1 0 001 1h16a1 1 0 001-1v-7a1 1 0 00-1 0l-7-7.5a1 1 0 00-1.882 0z"></path></svg>'; break;
+                default: bgColor = 'bg-gray-600'; icon = '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>';
+            }
+
+            const toast = document.createElement('div');
+            toast.className = `p-3 rounded-lg shadow-xl text-white ${bgColor} transform translate-x-full transition-transform duration-300 ease-out flex items-center gap-2`;
+            toast.innerHTML = `${icon} <span>${message}</span>`;
+            
+            area.appendChild(toast);
+
+            // Animate in
+            setTimeout(() => {
+                toast.style.transform = 'translateX(0)';
+            }, 10);
+
+            // Animate out and remove
+            setTimeout(() => {
+                toast.style.transform = 'translateX(120%)';
+                toast.addEventListener('transitionend', () => toast.remove());
+            }, 3000);
+        }
+
+        // --- Layout and Navigation Logic ---
+        const menuToggle = document.getElementById('menu-toggle');
+        const sidebar = document.getElementById('sidebar');
+        const conversationList = document.getElementById('conversation-list');
+        const chatThreadPanel = document.getElementById('chat-thread-panel');
+
+        // Toggle mobile sidebar (For main site navigation)
+        menuToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('open');
+        });
+
+        // Hide the conversation list and show the chat thread on mobile
+        function focusChatThread() {
+            if (window.innerWidth < 1024) {
+                conversationList.classList.add('hidden');
+                chatThreadPanel.classList.remove('hidden');
+            }
+        }
+        
+        // --- Social Inbox Specific Functionality ---
+
+        // Handle conversation item click
+        document.querySelectorAll('.conversation-item').forEach(item => {
+            item.addEventListener('click', function() {
+                // 1. Update active state
+                document.querySelectorAll('.conversation-item').forEach(c => {
+                    c.classList.remove('bg-indigo-100', 'border-indigo-400');
+                    c.classList.add('bg-white', 'border-gray-100');
+                });
+                this.classList.add('bg-indigo-100', 'border-indigo-400');
+                this.classList.remove('bg-white', 'border-gray-100');
+                
+                // 2. Focus chat panel on mobile
+                focusChatThread();
+
+                // 3. Simulate content load
+                const userName = this.getAttribute('data-user');
+                showNotification(`Loaded chat with ${userName}...`, 'indigo');
+            });
+        });
+
+        // Handle platform filter click
+        document.querySelectorAll('.platform-filter-item').forEach(filter => {
+            filter.addEventListener('click', function() {
+                // 1. Update active state
+                document.querySelectorAll('.platform-filter-item').forEach(f => {
+                    f.classList.remove('bg-indigo-50', 'text-indigo-700', 'font-semibold');
+                    f.classList.add('hover:bg-gray-50', 'text-gray-600');
+                });
+                this.classList.add('bg-indigo-50', 'text-indigo-700', 'font-semibold');
+                this.classList.remove('hover:bg-gray-50', 'text-gray-600');
+
+                const platform = this.getAttribute('data-platform');
+                showNotification(`Filtering conversations to **${platform.toUpperCase()}**`, 'gray');
+                
+                // For a real app, you'd reload the conversation list here
+            });
+        });
+
+        // Send Message Function
+        function sendMessage() {
+            const input = document.getElementById('message-input');
+            const message = input.value.trim();
+            if (message === "") {
+                showNotification("Message cannot be empty.", 'red');
+                return;
+            }
+
+            const chatContainer = document.querySelector('#chat-thread-panel > .flex-1');
+            const now = new Date();
+            const timeString = `${now.getHours()}:${now.getMinutes().toString().padStart(2, '0')} ${now.getHours() >= 12 ? 'PM' : 'AM'}`;
+
+            // Create new message bubble
+            const newBubble = document.createElement('div');
+            newBubble.className = 'flex justify-end';
+            newBubble.innerHTML = `
+                <div class="max-w-xs lg:max-w-md bg-indigo-500 text-white p-3 rounded-xl rounded-tr-none text-sm shadow-md animate-pulse">
+                    ${message}
+                    <div class="text-left text-xs text-indigo-200 mt-1">You (Ali) • ${timeString}</div>
+                </div>
+            `;
+            
+            chatContainer.appendChild(newBubble);
+            
+            // Scroll to bottom
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+            
+            // Clear input
+            input.value = '';
+
+            // Simulate server/AI processing and confirmation
+            showNotification(`Message sent successfully. Simulating AI analysis...`, 'green');
+        }
+
+        function handleMessageInput(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+        
+        // Handle CRM detail changes
+        document.getElementById('lead-status')?.addEventListener('change', function() {
+            const status = this.value;
+            showNotification(`Lead status updated to **${status.toUpperCase()}**`, 'green');
+        });
+
+        document.querySelectorAll('.tag-pill').forEach(tag => {
+            tag.addEventListener('click', function() {
+                const tagName = this.textContent.trim();
+                showNotification(`Tag action performed on **${tagName}**`, 'gray');
+            });
+        });
+
+        // Function to simulate back from chat thread to list on mobile (for the X button, if implemented)
+        window.showConversationList = function() {
+            if (window.innerWidth < 1024) {
+                conversationList.classList.remove('hidden');
+                chatThreadPanel.classList.add('hidden');
+            }
+        }
+        
+        // Simulate navigation on sidebar click (simple for this page's context)
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const target = this.getAttribute('data-target');
+                if (target !== 'social') {
+                     // For a multi-page app, this would navigate to the actual dashboard.html
+                     showNotification(`Simulating navigation to **${target.charAt(0).toUpperCase() + target.slice(1)}** page...`, 'indigo');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
