@@ -1,137 +1,283 @@
-<!doctype html>
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>ERP Demo — Modules Preview</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    .module-card { transition: transform .12s, box-shadow .12s; }
-    .module-card:hover { transform: translateY(-4px); box-shadow: 0 10px 20px rgba(2,6,23,.08); }
-    iframe { border: 0; width: 100%; height: 100%; }
-    @media (max-width: 1024px) {
-      .desktop-layout { flex-direction: column; }
-      #left { width: 100%; max-height: 260px; overflow:auto; }
-      #right { height: 60vh; }
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The Science of Spirituality</title>
+
+<style>
+:root {
+  --bg-dark: #050b1e;
+  --bg-mid: #0b1f3a;
+  --glow-blue: #1fa2ff;
+  --soft-blue: #6fd3ff;
+  --text-light: #e6f2ff;
+  --text-muted: #9bb3cc;
+  --bg-light: #f5f8fb;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, Helvetica, Arial, sans-serif;
+  background: radial-gradient(circle at top, #0d2b55 0%, var(--bg-dark) 55%);
+  color: var(--text-light);
+  line-height: 1.6;
+}
+
+/* Header */
+header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(5, 11, 30, 0.75);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(31, 162, 255, 0.2);
+}
+
+.header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.25rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.title {
+  font-size: 1.1rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--soft-blue);
+}
+
+/* Hero */
+.hero {
+  padding: 5rem 2rem 6rem;
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.hero h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  background: linear-gradient(180deg, #eaf6ff, #7ccfff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero p {
+  max-width: 720px;
+  margin: 0 auto 3rem;
+  color: var(--text-muted);
+  font-size: 1.1rem;
+}
+
+/* Videos stacked */
+.video-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.video-placeholder {
+  aspect-ratio: 16 / 9;
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at center, rgba(31,162,255,0.35), transparent 60%),
+    linear-gradient(180deg, #0c2344, #050b1e);
+  border: 1px solid rgba(31,162,255,0.35);
+  box-shadow: 0 0 45px rgba(31,162,255,0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--soft-blue);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* Collapsible Signup */
+.signup-wrapper {
+  margin-top: 4rem;
+}
+
+.signup-toggle {
+  width: 100%;
+  padding: 1rem;
+  border-radius: 14px;
+  border: none;
+  background: linear-gradient(180deg, #2ab6ff, #1a7fd6);
+  color: #031225;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  box-shadow: 0 0 25px rgba(31,162,255,0.4);
+}
+
+.signup-form {
+  margin-top: 1.5rem;
+  display: none;
+  padding: 2.5rem;
+  border-radius: 20px;
+  background: linear-gradient(180deg, rgba(15,45,80,0.6), rgba(5,11,30,0.6));
+  border: 1px solid rgba(31,162,255,0.25);
+  box-shadow: 0 0 45px rgba(31,162,255,0.15);
+}
+
+.signup-form.active {
+  display: block;
+}
+
+.signup-form form {
+  display: grid;
+  gap: 1rem;
+}
+
+.signup-form input {
+  padding: 0.85rem 1rem;
+  border-radius: 10px;
+  border: 1px solid rgba(31,162,255,0.4);
+  background: rgba(5,11,30,0.9);
+  color: var(--text-light);
+}
+
+/* Share buttons */
+.share {
+  margin-top: 3rem;
+}
+
+.share h3 {
+  margin-bottom: 1rem;
+  color: var(--soft-blue);
+}
+
+.share-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: center;
+}
+
+.share-buttons a {
+  padding: 0.6rem 1rem;
+  border-radius: 999px;
+  border: 1px solid rgba(31,162,255,0.3);
+  color: var(--soft-blue);
+  text-decoration: none;
+  font-size: 0.85rem;
+}
+
+.share-buttons a:hover {
+  background: rgba(31,162,255,0.15);
+}
+
+/* References */
+.references {
+  background: var(--bg-light);
+  color: #1a2a3a;
+  padding: 5rem 2rem;
+  margin-top: 6rem;
+}
+
+.references-inner {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.references h3 {
+  margin-bottom: 1rem;
+}
+
+.references p {
+  color: #4a5a6a;
+  max-width: 700px;
+}
+
+footer {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+</style>
 </head>
-<body class="bg-gray-50 text-gray-800 font-sans">
-  <header class="bg-white shadow-sm sticky top-0 z-40">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <img src="https://mlcneylnm22t.i.optimole.com/w:948/h:335/q:mauto/ig:avif/id:333301f2cf01e60c267d3b7b689a691a/https://skillsrator.com/SKILLSRATOR-LOGO-with-tagline-01.png" alt="logo" style="width:92px;">
-        <h1 class="text-lg font-semibold">ERP Demo — Modules preview</h1>
-      </div>
-      <div class="text-sm text-gray-500">Public demo: <span class="font-medium text-indigo-600">professorwired.github.io/erpdemo/</span></div>
+
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="title">The Science of Spirituality</div>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <h1>The Science of Spirituality</h1>
+    <p>
+      Exploring consciousness, meaning, and human experience through neuroscience,
+      physics, psychology, and contemplative traditions.
+    </p>
+
+    <div class="video-stack">
+      <div class="video-placeholder">Primary Documentary Video</div>
+      <div class="video-placeholder">Companion / Interview Video</div>
     </div>
-  </header>
 
-  <main class="max-w-7xl mx-auto p-4 lg:p-6 flex desktop-layout gap-6" style="min-height:calc(100vh - 88px);">
-    <!-- LEFT: module list -->
-    <aside id="left" class="w-96 bg-white rounded-xl shadow-sm p-4 flex-shrink-0">
-      <h2 class="text-sm font-medium text-gray-600 mb-3">Modules (click to preview)</h2>
+    <div class="signup-wrapper">
+      <button class="signup-toggle" onclick="toggleSignup()">
+        Sign up for future videos
+      </button>
 
-      <div class="space-y-3">
-        <!-- card template: update hrefs if your filenames differ -->
-        <div class="module-card p-3 bg-white rounded-lg border flex items-center justify-between">
-          <div>
-            <div class="text-sm font-semibold">Dashboard</div>
-            <div class="text-xs text-gray-500">Overview & KPIs</div>
-          </div>
-          <div class="flex items-center gap-2">
-            <button onclick="loadPreview('dashboard.html')" class="px-3 py-1 text-sm rounded bg-indigo-50 text-indigo-700">Preview</button>
-            <a href="https://professorwired.github.io/erpdemo/dashboard.html" target="_blank" class="text-xs text-gray-400">Open</a>
-          </div>
-        </div>
-
-        <div class="module-card p-3 bg-white rounded-lg border flex items-center justify-between">
-          <div>
-            <div class="text-sm font-semibold">AI Chatbot</div>
-            <div class="text-xs text-gray-500">Chatbot / bots panel</div>
-          </div>
-          <div class="flex items-center gap-2">
-            <button onclick="loadPreview('chatbots.html')" class="px-3 py-1 text-sm rounded bg-indigo-50 text-indigo-700">Preview</button>
-            <a href="https://professorwired.github.io/erpdemo/chatbots.html" target="_blank" class="text-xs text-gray-400">Open</a>
-          </div>
-        </div>
-
-        <div class="module-card p-3 bg-white rounded-lg border flex items-center justify-between">
-          <div>
-            <div class="text-sm font-semibold">Enrollments</div>
-            <div class="text-xs text-gray-500">Students / enrollments</div>
-          </div>
-          <div class="flex items-center gap-2">
-            <button onclick="loadPreview('enrollment.html')" class="px-3 py-1 text-sm rounded bg-indigo-50 text-indigo-700">Preview</button>
-            <a href="https://professorwired.github.io/erpdemo/enrollment.html" target="_blank" class="text-xs text-gray-400">Open</a>
-          </div>
-        </div>
-
-        <div class="module-card p-3 bg-white rounded-lg border flex items-center justify-between">
-          <div>
-            <div class="text-sm font-semibold">Finance</div>
-            <div class="text-xs text-gray-500">Revenue & expense views</div>
-          </div>
-          <div class="flex items-center gap-2">
-            <button onclick="loadPreview('finance.html')" class="px-3 py-1 text-sm rounded bg-indigo-50 text-indigo-700">Preview</button>
-            <a href="https://professorwired.github.io/erpdemo/finance.html" target="_blank" class="text-xs text-gray-400">Open</a>
-          </div>
-        </div>
-
-        <div class="module-card p-3 bg-white rounded-lg border flex items-center justify-between">
-          <div>
-            <div class="text-sm font-semibold">Social Inbox</div>
-            <div class="text-xs text-gray-500">Unified messages</div>
-          </div>
-          <div class="flex items-center gap-2">
-            <button onclick="loadPreview('socialinboxes.html')" class="px-3 py-1 text-sm rounded bg-indigo-50 text-indigo-700">Preview</button>
-            <a href="https://professorwired.github.io/erpdemo/socialinboxes.html" target="_blank" class="text-xs text-gray-400">Open</a>
-          </div>
-        </div>
-
-        <div class="module-card p-3 bg-white rounded-lg border flex items-center justify-between">
-          <div>
-            <div class="text-sm font-semibold">Dashboard Graphs</div>
-            <div class="text-xs text-gray-500">Charts & trends</div>
-          </div>
-          <div class="flex items-center gap-2">
-            <button onclick="loadPreview('dashboardgraph.html')" class="px-3 py-1 text-sm rounded bg-indigo-50 text-indigo-700">Preview</button>
-            <a href="https://professorwired.github.io/erpdemo/dashboardgraph.html" target="_blank" class="text-xs text-gray-400">Open</a>
-          </div>
-        </div>
-
+      <div class="signup-form" id="signupForm">
+        <form>
+          <input type="text" placeholder="First name" />
+          <input type="text" placeholder="Last name" />
+          <input type="email" placeholder="Email address" />
+          <input type="tel" placeholder="Mobile number (for text alerts)" />
+          <input type="text" placeholder="City / ZIP code" />
+        </form>
       </div>
+    </div>
 
-      <div class="mt-4 text-xs text-gray-500">
-        Tip: Click "Preview" to open inside the page, or "Open" to load in a new tab.
+    <div class="share">
+      <h3>Share</h3>
+      <div class="share-buttons">
+        <a href="#">Facebook</a>
+        <a href="#">Instagram</a>
+        <a href="#">X</a>
+        <a href="#">Email</a>
+        <a href="#">WhatsApp</a>
+        <a href="#">LinkedIn</a>
       </div>
-    </aside>
+    </div>
+  </section>
 
-    <!-- RIGHT: preview area -->
-    <section id="right" class="flex-1 bg-white rounded-xl shadow-sm overflow-hidden">
-      <div class="h-14 px-4 flex items-center justify-between border-b">
-        <div class="text-sm font-medium text-gray-700" id="preview-title">Select a module to preview</div>
-        <div class="text-xs text-gray-400">If a module needs more width, click "Open" to view separately.</div>
-      </div>
+  <section class="references">
+    <div class="references-inner">
+      <h3>Scientific References</h3>
+      <p>
+        This section will host peer-reviewed research, citations, and extended
+        reading materials supporting the ideas explored in the videos.
+      </p>
+    </div>
+  </section>
+</main>
 
-      <div class="h-[calc(100%-56px)]">
-        <iframe id="preview-frame" src="" title="module-preview"></iframe>
-      </div>
-    </section>
-  </main>
+<footer>
+  © The Science of Spirituality — Documentary Project
+</footer>
 
-  <script>
-    const base = "https://professorwired.github.io/erpdemo/"; // change if your path differs
-    const iframe = document.getElementById('preview-frame');
-    const title = document.getElementById('preview-title');
+<script>
+function toggleSignup() {
+  document.getElementById("signupForm").classList.toggle("active");
+}
+</script>
 
-    function loadPreview(path) {
-      iframe.src = base + path;
-      title.textContent = 'Preview — ' + path;
-    }
-
-    // Optional: auto-load dashboard on open
-    loadPreview('dashboard.html');
-  </script>
 </body>
 </html>
